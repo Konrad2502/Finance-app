@@ -1,10 +1,13 @@
-import Container from "./components/Container";
+import Container from "./components/Container/Container";
+import Home from "./pages/Home/Home";
 import "./styles/main.scss";
 
 function App() {
   return (
     <>
-      <Container>hello</Container>
+      <Container>
+        <Home />
+      </Container>
     </>
   );
 }
