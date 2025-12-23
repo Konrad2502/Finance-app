@@ -65,6 +65,8 @@
   transition: background-color 300ms ease,
   color 300ms ease,
   border-left-color 300ms ease; 
+  text-decoration: none;  
+  color: inherit;   
   &:hover,
   &--active {
     background-color: $white;
@@ -179,3 +181,4 @@
 .sidebar__footer:hover .sidebar__footer-text {
   color: $white;
 }
+

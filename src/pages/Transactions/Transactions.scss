@@ -1,0 +1,14 @@
+@import '../../styles/settings';
+
+.transactions {
+    min-width: 0;
+    flex: 1;
+    padding: 40px 20px;
+    display: flex;
+    flex: column;
+    gap: 30px;
+    &__title {
+        @include text-preset-1;
+    }
+
+}
