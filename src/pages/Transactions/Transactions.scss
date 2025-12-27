@@ -1,14 +1,246 @@
-@import '../../styles/settings';
+@import "../../styles/settings";
 
+/* PAGE */
 .transactions {
-    min-width: 0;
-    flex: 1;
-    padding: 40px 20px;
-    display: flex;
-    flex: column;
-    gap: 30px;
-    &__title {
-        @include text-preset-1;
-    }
+  flex: 1;
+  padding: 40px 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 30px;
+  background-color: $beige-100;
 
+  &__title {
+    @include text-preset-1;
+  }
+}
+
+/* CARD */
+.transactions__card {
+  background-color: $white;
+  border-radius: 10px;
+  padding: 24px;
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+  gap: 24px;
+}
+
+.transactions__list {
+    display: flex;
+    flex-direction: column;
+    flex: 1;
+}
+
+/* INPUTS */
+.transactions__inputs {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+/* SEARCH */
+.transactions__search {
+  position: relative;
+}
+
+.transactions__search-input {
+  width: 280px;
+  padding: 12px 40px 12px 16px;
+  border-radius: 8px;
+  border: 1px solid $beige-100;
+  @include text-preset-4;
+}
+
+.transactions__search-icon {
+  position: absolute;
+  right: 12px;
+  top: 50%;
+  transform: translateY(-50%);
+  color: $grey-600;
+}
+
+/* FILTERS */
+.transactions__filters {
+  display: flex;
+  gap: 20px;
+}
+
+.transactions__dropdown {
+  position: relative;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.transactions__dropdown-label {
+  @include text-preset-5;
+  color: $grey-600;
+}
+
+.transactions__dropdown-btn {
+  padding: 10px 16px;
+  border-radius: 8px;
+  border: 1px solid $beige-100;
+  background-color: $white;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  @include text-preset-4;
+}
+
+/* arrows */
+.transactions__dropdown-arrow {
+  width: 12px;
+  height: 12px;
+  transform: rotate(270deg);
+  transition: transform 200ms ease;
+}
+
+.transactions__dropdown-arrow--open {
+  transform: rotate(90deg);
+}
+
+/* dropdown menu */
+.transactions__dropdown-menu {
+  position: absolute;
+  top: calc(100% + 10px);
+  right: 0;
+  width: 220px;
+  background-color: $white;
+  border-radius: 10px;
+  box-shadow: 0 12px 24px rgba(0, 0, 0, 0.12);
+  z-index: 10;
+  overflow: hidden;
+}
+
+.transactions__dropdown-menu--scroll {
+  max-height: 260px;
+  overflow-y: auto;
+}
+
+.transactions__dropdown-item {
+  width: 100%;
+  text-align: left;
+  padding: 14px 16px;
+  border: none;
+  background-color: transparent;
+  cursor: pointer;
+  @include text-preset-4;
+
+  &:not(:last-child) {
+    border-bottom: 1px solid $beige-100;
+  }
+
+  &:hover {
+    background-color: $beige-100;
+  }
+}
+
+.transactions__dropdown-item--active {
+  @include text-preset-4-bold;
+}
+
+/* HEADER */
+.transactions__header {
+  display: flex;
+  padding-bottom: 12px;
+  border-bottom: 1px solid $beige-100;
+  @include text-preset-5;
+  color: $grey-600;
+
+  &-user { flex: 5; }
+  &-category { flex: 2; }
+  &-date { flex: 2; }
+  &-amount { flex: 1; text-align: right; }
+}
+
+/* LIST */
+.transactions__row {
+  display: flex;
+  align-items: center;
+  padding: 16px 0;
+  border-bottom: 1px solid $beige-100;
+  flex: 1;
+
+  &:last-child {
+    border-bottom: none;
+  }
+}
+
+.transactions__user {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  flex: 5;
+}
+
+.transactions__avatar {
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+}
+
+.transactions__name {
+  @include text-preset-4-bold;
+}
+
+.transactions__category,
+.transactions__date {
+  flex: 2;
+  @include text-preset-5;
+  color: $grey-600;
+}
+
+.transactions__amount {
+  flex: 1;
+  text-align: right;
+  @include text-preset-4-bold;
+
+  &--positive { color: $green; }
+  &--negative { color: $grey-900; }
+}
+
+/* PAGINATION */
+.transactions__pagination {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.transactions__page-btn {
+  padding: 8px 14px;
+  border-radius: 8px;
+  border: 1px solid $beige-100;
+  background-color: $white;
+  cursor: pointer;
+  display: flex;
+  gap: 10px;
+  align-items: center;
+  @include text-preset-4;
+}
+
+.transactions__pages {
+  display: flex;
+  gap: 8px;
+}
+
+.transactions__page-number {
+  width: 36px;
+  height: 36px;
+  border-radius: 8px;
+  border: 1px solid $beige-100;
+  background-color: $white;
+  cursor: pointer;
+  @include text-preset-4;
+
+  &--active {
+    background-color: $grey-900;
+    color: $white;
+    border-color: $grey-900;
+  }
+}
+
+.transactions__page-arrow--next {
+  transform: rotate(180deg);
 }
