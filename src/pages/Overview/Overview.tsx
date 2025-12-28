@@ -199,10 +199,12 @@ export default function Overview() {
             </div>
             <div className="budgets__content">
               {/* DONUT */}
-              <div className="budgets__chart">
-                <div className="budgets__chart-inner">
-                  <p className="budgets__chart-amount">$338</p>
-                  <p className="budgets__chart-label">of $975 limit</p>
+              <div className="budgets__wrap">
+                <div className="budgets__chart">
+                  <div className="budgets__chart-inner">
+                    <p className="budgets__chart-amount">$338</p>
+                    <p className="budgets__chart-label">of $975 limit</p>
+                  </div>
                 </div>
               </div>
 

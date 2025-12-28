@@ -1,7 +1,7 @@
 @import "../../styles/settings";
 
 /* PAGE */
-.transactions {
+.transactions-page {
   flex: 1;
   padding: 40px 20px;
   display: flex;
@@ -15,7 +15,7 @@
 }
 
 /* CARD */
-.transactions__card {
+.transactions-page__card {
   background-color: $white;
   border-radius: 10px;
   padding: 24px;
@@ -23,27 +23,22 @@
   flex-direction: column;
   flex: 1;
   gap: 24px;
-}
-
-.transactions__list {
-    display: flex;
-    flex-direction: column;
-    flex: 1;
+  min-height: 0;
 }
 
 /* INPUTS */
-.transactions__inputs {
+.transactions-page__inputs {
   display: flex;
   justify-content: space-between;
   align-items: center;
 }
 
 /* SEARCH */
-.transactions__search {
+.transactions-page__search {
   position: relative;
 }
 
-.transactions__search-input {
+.transactions-page__search-input {
   width: 280px;
   padding: 12px 40px 12px 16px;
   border-radius: 8px;
@@ -51,7 +46,7 @@
   @include text-preset-4;
 }
 
-.transactions__search-icon {
+.transactions-page__search-icon {
   position: absolute;
   right: 12px;
   top: 50%;
@@ -60,24 +55,24 @@
 }
 
 /* FILTERS */
-.transactions__filters {
+.transactions-page__filters {
   display: flex;
   gap: 20px;
 }
 
-.transactions__dropdown {
+.transactions-page__dropdown {
   position: relative;
   display: flex;
   align-items: center;
   gap: 10px;
 }
 
-.transactions__dropdown-label {
+.transactions-page__dropdown-label {
   @include text-preset-5;
   color: $grey-600;
 }
 
-.transactions__dropdown-btn {
+.transactions-page__dropdown-btn {
   padding: 10px 16px;
   border-radius: 8px;
   border: 1px solid $beige-100;
@@ -89,20 +84,18 @@
   @include text-preset-4;
 }
 
-/* arrows */
-.transactions__dropdown-arrow {
+.transactions-page__dropdown-arrow {
   width: 12px;
   height: 12px;
   transform: rotate(270deg);
   transition: transform 200ms ease;
 }
 
-.transactions__dropdown-arrow--open {
+.transactions-page__dropdown-arrow--open {
   transform: rotate(90deg);
 }
 
-/* dropdown menu */
-.transactions__dropdown-menu {
+.transactions-page__dropdown-menu {
   position: absolute;
   top: calc(100% + 10px);
   right: 0;
@@ -114,12 +107,12 @@
   overflow: hidden;
 }
 
-.transactions__dropdown-menu--scroll {
+.transactions-page__dropdown-menu--scroll {
   max-height: 260px;
   overflow-y: auto;
 }
 
-.transactions__dropdown-item {
+.transactions-page__dropdown-item {
   width: 100%;
   text-align: left;
   padding: 14px 16px;
@@ -137,12 +130,12 @@
   }
 }
 
-.transactions__dropdown-item--active {
+.transactions-page__dropdown-item--active {
   @include text-preset-4-bold;
 }
 
 /* HEADER */
-.transactions__header {
+.transactions-page__header {
   display: flex;
   padding-bottom: 12px;
   border-bottom: 1px solid $beige-100;
@@ -156,43 +149,53 @@
 }
 
 /* LIST */
-.transactions__row {
+.transactions-page__list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  flex: 1;
+  min-height: 0;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+
+.transactions-page__row {
   display: flex;
   align-items: center;
   padding: 16px 0;
   border-bottom: 1px solid $beige-100;
-  flex: 1;
 
   &:last-child {
     border-bottom: none;
   }
 }
 
-.transactions__user {
+.transactions-page__user {
   display: flex;
   align-items: center;
   gap: 12px;
   flex: 5;
 }
 
-.transactions__avatar {
+.transactions-page__avatar {
   width: 32px;
   height: 32px;
   border-radius: 50%;
 }
 
-.transactions__name {
+.transactions-page__name {
   @include text-preset-4-bold;
 }
 
-.transactions__category,
-.transactions__date {
+.transactions-page__category,
+.transactions-page__date {
   flex: 2;
   @include text-preset-5;
   color: $grey-600;
 }
 
-.transactions__amount {
+.transactions-page__amount {
   flex: 1;
   text-align: right;
   @include text-preset-4-bold;
@@ -202,13 +205,13 @@
 }
 
 /* PAGINATION */
-.transactions__pagination {
+.transactions-page__pagination {
   display: flex;
   justify-content: space-between;
   align-items: center;
 }
 
-.transactions__page-btn {
+.transactions-page__page-btn {
   padding: 8px 14px;
   border-radius: 8px;
   border: 1px solid $beige-100;
@@ -220,12 +223,12 @@
   @include text-preset-4;
 }
 
-.transactions__pages {
+.transactions-page__pages {
   display: flex;
   gap: 8px;
 }
 
-.transactions__page-number {
+.transactions-page__page-number {
   width: 36px;
   height: 36px;
   border-radius: 8px;
@@ -241,6 +244,6 @@
   }
 }
 
-.transactions__page-arrow--next {
+.transactions-page__page-arrow--next {
   transform: rotate(180deg);
 }

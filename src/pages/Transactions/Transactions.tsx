@@ -6,10 +6,6 @@ import Avatar from "../../assets/images/avatars/aqua-flow-utilities.jpg";
 
 const ITEMS_PER_PAGE = 10;
 
-type DropdownType = "sort" | "category" | null;
-type SortOption = (typeof sortOptions)[number];
-type CategoryOption = (typeof categoryOptions)[number];
-
 const sortOptions = [
   "Latest",
   "Oldest",
@@ -33,6 +29,10 @@ const categoryOptions = [
   "General",
 ] as const;
 
+type SortOption = (typeof sortOptions)[number];
+type CategoryOption = (typeof categoryOptions)[number];
+type DropdownType = "sort" | "category" | null;
+
 const mockTransactions = Array.from({ length: 50 }, (_, i) => ({
   id: i + 1,
   name: `User ${i + 1}`,
@@ -50,7 +50,6 @@ export default function Transactions() {
 
   const dropdownRef = useRef<HTMLDivElement | null>(null);
 
-  /* pagination */
   const totalPages = Math.ceil(mockTransactions.length / ITEMS_PER_PAGE);
   const startIndex = (currentPage - 1) * ITEMS_PER_PAGE;
   const currentItems = mockTransactions.slice(
@@ -58,7 +57,6 @@ export default function Transactions() {
     startIndex + ITEMS_PER_PAGE
   );
 
-  /* close dropdown on outside click */
   useEffect(() => {
     const handleClickOutside = (e: MouseEvent) => {
       if (
@@ -74,25 +72,28 @@ export default function Transactions() {
   }, []);
 
   return (
-    <main className="transactions">
-      <h1 className="transactions__title">Transactions</h1>
+    <main className="transactions-page">
+      <h1 className="transactions-page__title">Transactions</h1>
 
-      <section className="transactions__card">
-        <div className="transactions__inputs" ref={dropdownRef}>
-          <div className="transactions__search">
+      <section className="transactions-page__card">
+        {/* INPUTS */}
+        <div className="transactions-page__inputs" ref={dropdownRef}>
+          <div className="transactions-page__search">
             <input
               type="text"
               placeholder="Search transaction"
-              className="transactions__search-input"
+              className="transactions-page__search-input"
             />
-            <CiSearch className="transactions__search-icon" />
+            <CiSearch className="transactions-page__search-icon" />
           </div>
-          <div className="transactions__filters">
-            <div className="transactions__dropdown">
-              <span className="transactions__dropdown-label">Sort by</span>
+
+          <div className="transactions-page__filters">
+            {/* SORT */}
+            <div className="transactions-page__dropdown">
+              <span className="transactions-page__dropdown-label">Sort by</span>
               <button
                 type="button"
-                className="transactions__dropdown-btn"
+                className="transactions-page__dropdown-btn"
                 onClick={() =>
                   setOpenDropdown((p) => (p === "sort" ? null : "sort"))
                 }
@@ -102,23 +103,23 @@ export default function Transactions() {
                   src={Arrow}
                   alt=""
                   aria-hidden="true"
-                  className={`transactions__dropdown-arrow ${
+                  className={`transactions-page__dropdown-arrow ${
                     openDropdown === "sort"
-                      ? "transactions__dropdown-arrow--open"
+                      ? "transactions-page__dropdown-arrow--open"
                       : ""
                   }`}
                 />
               </button>
 
               {openDropdown === "sort" && (
-                <div className="transactions__dropdown-menu">
+                <div className="transactions-page__dropdown-menu">
                   {sortOptions.map((opt) => (
                     <button
                       key={opt}
                       type="button"
-                      className={`transactions__dropdown-item ${
+                      className={`transactions-page__dropdown-item ${
                         opt === sortValue
-                          ? "transactions__dropdown-item--active"
+                          ? "transactions-page__dropdown-item--active"
                           : ""
                       }`}
                       onClick={() => {
@@ -134,11 +135,13 @@ export default function Transactions() {
             </div>
 
             {/* CATEGORY */}
-            <div className="transactions__dropdown">
-              <span className="transactions__dropdown-label">Category</span>
+            <div className="transactions-page__dropdown">
+              <span className="transactions-page__dropdown-label">
+                Category
+              </span>
               <button
                 type="button"
-                className="transactions__dropdown-btn"
+                className="transactions-page__dropdown-btn"
                 onClick={() =>
                   setOpenDropdown((p) => (p === "category" ? null : "category"))
                 }
@@ -148,23 +151,23 @@ export default function Transactions() {
                   src={Arrow}
                   alt=""
                   aria-hidden="true"
-                  className={`transactions__dropdown-arrow ${
+                  className={`transactions-page__dropdown-arrow ${
                     openDropdown === "category"
-                      ? "transactions__dropdown-arrow--open"
+                      ? "transactions-page__dropdown-arrow--open"
                       : ""
                   }`}
                 />
               </button>
 
               {openDropdown === "category" && (
-                <div className="transactions__dropdown-menu transactions__dropdown-menu--scroll">
+                <div className="transactions-page__dropdown-menu transactions-page__dropdown-menu--scroll">
                   {categoryOptions.map((opt) => (
                     <button
                       key={opt}
                       type="button"
-                      className={`transactions__dropdown-item ${
+                      className={`transactions-page__dropdown-item ${
                         opt === categoryValue
-                          ? "transactions__dropdown-item--active"
+                          ? "transactions-page__dropdown-item--active"
                           : ""
                       }`}
                       onClick={() => {
@@ -182,30 +185,40 @@ export default function Transactions() {
         </div>
 
         {/* HEADER */}
-        <div className="transactions__header">
-          <span className="transactions__header-user">Recipient / Sender</span>
-          <span className="transactions__header-category">Category</span>
-          <span className="transactions__header-date">Transaction Date</span>
-          <span className="transactions__header-amount">Amount</span>
+        <div className="transactions-page__header">
+          <span className="transactions-page__header-user">
+            Recipient / Sender
+          </span>
+          <span className="transactions-page__header-category">Category</span>
+          <span className="transactions-page__header-date">
+            Transaction Date
+          </span>
+          <span className="transactions-page__header-amount">Amount</span>
         </div>
 
         {/* LIST */}
-        <ul className="transactions__list">
+        <ul className="transactions-page__list">
           {currentItems.map((item) => (
-            <li key={item.id} className="transactions__row">
-              <div className="transactions__user">
-                <img src={Avatar} alt="" className="transactions__avatar" />
-                <span className="transactions__name">{item.name}</span>
+            <li key={item.id} className="transactions-page__row">
+              <div className="transactions-page__user">
+                <img
+                  src={Avatar}
+                  alt=""
+                  className="transactions-page__avatar"
+                />
+                <span className="transactions-page__name">{item.name}</span>
               </div>
 
-              <span className="transactions__category">{item.category}</span>
-              <span className="transactions__date">{item.date}</span>
+              <span className="transactions-page__category">
+                {item.category}
+              </span>
+              <span className="transactions-page__date">{item.date}</span>
 
               <span
-                className={`transactions__amount ${
+                className={`transactions-page__amount ${
                   item.amount.startsWith("+")
-                    ? "transactions__amount--positive"
-                    : "transactions__amount--negative"
+                    ? "transactions-page__amount--positive"
+                    : "transactions-page__amount--negative"
                 }`}
               >
                 {item.amount}
@@ -215,25 +228,25 @@ export default function Transactions() {
         </ul>
 
         {/* PAGINATION */}
-        <div className="transactions__pagination">
+        <div className="transactions-page__pagination">
           <button
             type="button"
-            className="transactions__page-btn"
+            className="transactions-page__page-btn"
             onClick={() => setCurrentPage((p) => Math.max(1, p - 1))}
           >
             <img src={Arrow} alt="" aria-hidden="true" />
             <span>Prev</span>
           </button>
 
-          <div className="transactions__pages">
+          <div className="transactions-page__pages">
             {Array.from({ length: totalPages }, (_, i) => i + 1).map((page) => (
               <button
                 key={page}
                 type="button"
                 onClick={() => setCurrentPage(page)}
-                className={`transactions__page-number ${
+                className={`transactions-page__page-number ${
                   page === currentPage
-                    ? "transactions__page-number--active"
+                    ? "transactions-page__page-number--active"
                     : ""
                 }`}
               >
@@ -244,7 +257,7 @@ export default function Transactions() {
 
           <button
             type="button"
-            className="transactions__page-btn"
+            className="transactions-page__page-btn"
             onClick={() => setCurrentPage((p) => Math.min(totalPages, p + 1))}
           >
             <span>Next</span>
@@ -252,7 +265,7 @@ export default function Transactions() {
               src={Arrow}
               alt=""
               aria-hidden="true"
-              className="transactions__page-arrow--next"
+              className="transactions-page__page-arrow--next"
             />
           </button>
         </div>
