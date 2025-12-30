@@ -1,9 +1,20 @@
 import "./Budgets.scss";
+import { useEffect, useRef, useState } from "react";
 import DotsIcon from "../../assets/images/icon-ellipsis.svg";
 import ArrowRight from "../../assets/images/icon-caret-right.svg";
 import Avatar from "../../assets/images/avatars/daniel-carter.jpg";
+import DeleteModal from "./DeleteModal";
+import EditModal from "./EditModal";
 
-const mockBudgets = [
+type BudgetTypes = {
+  id: number;
+  name: string;
+  color: "green" | "cyan" | "yellow" | "navy";
+};
+
+type BudgetAction = number | null;
+
+const mockBudgets: BudgetTypes[] = [
   { id: 1, name: "Entertainment", color: "green" },
   { id: 2, name: "Bills", color: "cyan" },
   { id: 3, name: "Dining Out", color: "yellow" },
@@ -11,6 +22,21 @@ const mockBudgets = [
 ];
 
 export default function Budgets() {
+  const [openMenu, setOpenMenu] = useState<BudgetAction>(null);
+  const menuRef = useRef<HTMLDivElement | null>(null);
+
+  /* close dropdown on outside click */
+  useEffect(() => {
+    const handleClickOutside = (e: MouseEvent) => {
+      if (menuRef.current && !menuRef.current.contains(e.target as Node)) {
+        setOpenMenu(null);
+      }
+    };
+
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => document.removeEventListener("mousedown", handleClickOutside);
+  }, []);
+
   return (
     <main className="budgets-page">
       {/* HEADER */}
@@ -25,7 +51,7 @@ export default function Budgets() {
 
       {/* CONTENT */}
       <section className="budgets-page__content">
-        {/* LEFT – CHART */}
+        {/* LEFT – SUMMARY */}
         <div className="budgets-summary">
           <div className="budgets-summary__chart">
             <div className="budgets-summary__chart-inner">
@@ -70,11 +96,12 @@ export default function Budgets() {
             </li>
           </ul>
         </div>
+
         {/* RIGHT – BUDGET CARDS */}
         <div className="budgets-list">
           {mockBudgets.map((budget) => (
             <article key={budget.id} className="budget-card">
-              {/* CARD HEADER */}
+              {/* HEADER */}
               <header className="budget-card__header">
                 <div className="budget-card__title">
                   <span
@@ -83,12 +110,39 @@ export default function Budgets() {
                   <h3 className="budget-card__name">{budget.name}</h3>
                 </div>
 
-                <img src={DotsIcon} alt="" aria-hidden="true" />
+                <div className="budget-card__menu" ref={menuRef}>
+                  <button
+                    type="button"
+                    className="budget-card__menu-btn"
+                    onClick={() =>
+                      setOpenMenu((prev) =>
+                        prev === budget.id ? null : budget.id
+                      )
+                    }
+                  >
+                    <img src={DotsIcon} alt="" aria-hidden="true" />
+                  </button>
+
+                  {openMenu === budget.id && (
+                    <div className="budget-card__menu-dropdown">
+                      <button type="button" className="budget-card__menu-item">
+                        Edit Budget
+                      </button>
+
+                      <button
+                        type="button"
+                        className="budget-card__menu-item budget-card__menu-item--danger"
+                      >
+                        Delete Budget
+                      </button>
+                    </div>
+                  )}
+                </div>
               </header>
 
               <p className="budget-card__limit">Maximum of $50.00</p>
 
-              {/* PROGRESS */}
+              {/* BAR */}
               <div className="budget-card__bar">
                 <div
                   className={`budget-card__bar-fill budget-card__bar-fill--${budget.color}`}
@@ -193,6 +247,8 @@ export default function Budgets() {
           ))}
         </div>
       </section>
+      <DeleteModal />
+      <EditModal />
     </main>
   );
 }

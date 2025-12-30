@@ -33,6 +33,10 @@
   @include text-preset-4;
 }
 
+.budgets-page__btnText {
+  font-weight: 700;
+}
+
 
 
 .budgets-page__content {
@@ -337,3 +341,352 @@
   @include text-preset-5;
   color: $grey-600;
 }
+
+/* =========================
+   BUDGET CARD DROPDOWN
+========================= */
+
+.budget-card__menu {
+  position: relative;
+}
+
+.budget-card__menu-btn {
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 4px;
+}
+
+.budget-card__menu-dropdown {
+  position: absolute;
+  top: calc(100% + 8px);
+  right: 0;
+  width: 160px;
+  background-color: $white;
+  border-radius: 10px;
+  box-shadow: 0 12px 24px rgba(0, 0, 0, 0.12);
+  overflow: hidden;
+  z-index: 20;
+}
+
+.budget-card__menu-item {
+  width: 100%;
+  padding: 14px 16px;
+  text-align: left;
+  border: none;
+  background: transparent;
+  cursor: pointer;
+  @include text-preset-4;
+
+  &:hover {
+    background-color: $beige-100;
+  }
+
+  &:not(:last-child) {
+    border-bottom: 1px solid $beige-100;
+  }
+}
+
+.budget-card__menu-item--danger {
+  color: $red;
+}
+/*Delete modal*/ 
+
+/* ROOT */
+.delete-modal {
+  position: fixed;
+  inset: 0;
+  z-index: 1000;
+  display: none;
+}
+
+/* BACKDROP */
+.delete-modal__overlay {
+  position: absolute;
+  inset: 0;
+  background-color: rgba(0, 0, 0, 0.4);
+}
+
+/* CONTENT */
+.delete-modal__content {
+  position: relative;
+  background-color: $white;
+  width: 100%;
+  max-width: 480px;
+  margin: auto;
+  padding: 32px;
+  border-radius: 12px;
+  box-shadow: 0 24px 48px rgba(0, 0, 0, 0.18);
+
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+
+  top: 50%;
+  transform: translateY(-50%);
+}
+
+/* CLOSE */
+.delete-modal__close {
+  position: absolute;
+  top: 16px;
+  right: 16px;
+
+  background: none;
+  border: none;
+  cursor: pointer;
+
+  img {
+    width: 20px;
+    height: 20px;
+  }
+}
+
+/* TITLE */
+.delete-modal__title {
+  @include text-preset-2;
+  color: $grey-900;
+}
+
+/* TEXT */
+.delete-modal__text {
+  @include text-preset-4;
+  color: $grey-600;
+  line-height: 1.5;
+}
+
+/* CONFIRM */
+.delete-modal__confirm {
+  background-color: $red;
+  color: $white;
+  border: none;
+  border-radius: 8px;
+  padding: 14px;
+  cursor: pointer;
+
+  @include text-preset-4-bold;
+
+  &:hover {
+    opacity: 0.9;
+  }
+}
+
+/* CANCEL */
+.delete-modal__cancel {
+  background: none;
+  border: none;
+  cursor: pointer;
+  text-align: center;
+
+  @include text-preset-4;
+  color: $grey-600;
+
+  &:hover {
+    color: $grey-900;
+  }
+}
+
+/*Budgets Modal */
+
+/* overlay */
+.budget-modal__overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.45);
+  z-index: 1000;
+  display: none;
+}
+
+/* container */
+.budget-modal {
+  display: none;
+  position: fixed;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
+
+  width: 640px;
+  max-width: calc(100% - 2rem);
+
+  background: #fff;
+  border-radius: 16px;
+  padding: 2rem;
+
+  z-index: 1001;
+}
+
+/* header */
+.budget-modal__header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  
+}
+
+.budget-modal__title {
+  @include text-preset-1;
+  color: $grey-900;
+}
+
+.budget-modal__close {
+  border: none;
+  background: transparent;
+  cursor: pointer;
+  border-radius: 10px;
+  
+
+  img {
+   
+    width: 24px;
+    height: 24px;
+  }
+}
+
+.budget-modal__desc {
+  margin: 1rem 0 2rem;
+  @include text-preset-4;
+  color: $grey-600;
+}
+
+/* fields */
+.budget-modal__field {
+  display: flex;
+  flex-direction: column;
+  gap: 0.6rem;
+  margin-bottom: 1.35rem;
+}
+
+.budget-modal__label {
+  @include text-preset-4-bold;
+  color: $grey-600;
+}
+
+/* money input (UI only) */
+.budget-modal__money-input {
+  display: flex;
+  align-items: center;
+  gap: 0.65rem;
+
+  border: 1px solid #cfcfcf;
+  border-radius: 12px;
+  padding: 0.9rem 1rem;
+}
+
+.budget-modal__currency {
+  color: #7a7a7a;
+}
+
+.budget-modal__input {
+  width: 100%;
+  border: none;
+  outline: none;
+  @include text-preset-4;
+  color: $grey-600;
+}
+
+/* submit */
+.budget-modal__submit {
+  width: 100%;
+  margin-top: 0.4rem;
+
+  border: none;
+  border-radius: 12px;
+  padding: 1rem;
+
+  background: $grey-900;
+  color: #fff;
+
+  font-weight: 700;
+  font-size: 1rem;
+  cursor: pointer;
+}
+
+/* dropdown */
+.dropdown {
+  position: relative;
+}
+
+.dropdown__btn {
+  width: 100%;
+  border: 1px solid #cfcfcf;
+  border-radius: 12px;
+  background: #fff;
+
+  padding: 0.9rem 1rem;
+  cursor: pointer;
+
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.dropdown__value {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.75rem;
+}
+
+.dropdown__text {
+  @include text-preset-4;
+}
+
+/* menu */
+.dropdown__menu {
+  position: absolute;
+  top: calc(100% + 0.55rem);
+  left: 0;
+  width: 100%;
+  background: #fff;
+  border-radius: 14px;
+  padding: 0.5rem;
+  box-shadow: 0 20px 50px rgba(0, 0, 0, 0.18);
+  z-index: 10;
+  max-height: 240px;
+  overflow-y: auto;
+}
+
+.dropdown__item {
+  width: 100%;
+  border: none;
+  background: transparent;
+  cursor: pointer;
+
+  padding: 0.9rem 0.85rem;
+  border-radius: 12px;
+
+  display: flex;
+  align-items: center;
+  gap: 0.85rem;
+ 
+  text-align: left;
+
+  &:hover {
+    background: #f3f3f3;
+  }
+}
+
+/* dots */
+.color-dot {
+  width: 14px;
+  height: 14px;
+  border-radius: 999px;
+  display: inline-block;
+  flex: 0 0 14px;
+}
+
+/* map to your SCSS vars */
+.color-dot--green { background: $green; }
+.color-dot--yellow { background: $yellow; }
+.color-dot--cyan { background: $cyan; }
+.color-dot--navy { background: $navy; }
+
+.color-dot--red { background: $red; }
+.color-dot--purple { background: $purple; }
+.color-dot--turquoise { background: $turquoise; }
+.color-dot--brown { background: $brown; }
+
+.color-dot--magenta { background: $magenta; }
+.color-dot--blue { background: $blue; }
+.color-dot--army-green { background: $army-green; }
+.color-dot--gold { background: $gold; }
+.color-dot--orange { background: $orange; }
