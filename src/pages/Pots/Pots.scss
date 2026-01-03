@@ -1,1 +1,696 @@
 @import '../../styles/settings';
+
+
+
+/* PAGE */
+.pots-page {
+  flex: 1;
+  padding: 40px 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 30px;
+  background-color: $beige-100;
+}
+
+.pots-page__heading {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.pots-page__title {
+  @include text-preset-1;
+}
+
+.pots-page__btn {
+  background-color: $grey-900;
+  color: $white;
+  border: none;
+  border-radius: 8px;
+  padding: 14px 18px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  cursor: pointer;
+  @include text-preset-4;
+}
+
+.pots-page__btnIcon {
+  line-height: 1;
+}
+
+/* CONTENT  */
+.pots-page__content {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 20px;
+  align-items: stretch;
+  flex: 1;
+}
+
+/* CARD */
+.pot-card {
+  background-color: $white;
+  border-radius: 10px;
+  padding: 24px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+
+  
+  flex: 1 1 calc(50% - 10px);
+  max-width: calc(50% - 10px);
+}
+
+.pots-card__wrapper {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+
+/* header */
+.pot-card__header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.pot-card__title {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.pot-card__dot {
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+
+  &--green { background-color: $green; }
+  &--navy { background-color: $navy; }
+  &--cyan { background-color: $cyan; }
+  &--yellow { background-color: $yellow; }
+  &--purple { background-color: $purple; }
+}
+
+.pot-card__name {
+  @include text-preset-2;
+}
+
+.pot-card__menu-btn {
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  padding: 4px;
+  display: flex;
+  align-items: center;
+}
+
+/* totals row */
+.pot-card__top {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-end;
+}
+
+.pot-card__label {
+  @include text-preset-5;
+  color: $grey-600;
+}
+
+.pot-card__amount {
+  @include text-preset-1;
+}
+
+/* bar */
+.pot-card__bar {
+  height: 8px;
+  border-radius: 999px;
+  background-color: $beige-100;
+  overflow: hidden;
+}
+
+.pot-card__bar-fill {
+  height: 100%;
+  border-radius: inherit;
+
+  &--green { background-color: $green; }
+  &--navy { background-color: $navy; }
+  &--cyan { background-color: $cyan; }
+  &--yellow { background-color: $yellow; }
+  &--purple { background-color: $purple; }
+}
+
+/* meta */
+
+.pot-card__meta {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.pot-card__percent {
+  @include text-preset-5;
+  color: $grey-600;
+}
+
+.pot-card__target {
+  @include text-preset-5;
+  color: $grey-600;
+}
+
+/* actions */
+.pot-card__actions {
+  display: flex;
+  gap: 16px;
+  margin-top: 12px;
+}
+
+.pot-card__action {
+  flex: 1;
+  border: none;
+  border-radius: 10px;
+  padding: 14px 16px;
+  cursor: pointer;
+  background-color: $beige-100;
+  @include text-preset-4-bold;
+}
+
+/*Dropdown box(edit,delete)*/
+
+.pot-card__menu {
+  position: relative; 
+  display: flex;
+  align-items: center;
+}
+
+.pot-card__menu-btn {
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 4px;
+  display: flex;
+  align-items: center;
+}
+
+/* DROPDOWN */
+
+.pot-card__menu-dropdown {
+  position: absolute; 
+  top: calc(100% + 8px);
+  right: 0;
+  width: 160px;
+  background-color: $white;
+  border-radius: 10px;
+  box-shadow: 0 12px 24px rgba(0, 0, 0, 0.12);
+  overflow: hidden;
+  z-index: 20;
+}
+
+/* ITEMS */
+
+.pot-card__menu-item {
+  width: 100%;
+  padding: 14px 16px;
+  text-align: left;
+  border: none;
+  background: transparent;
+  cursor: pointer;
+  @include text-preset-4;
+  &:hover {
+    background-color: $beige-100;
+  }
+  &:not(:last-child) {
+    border-bottom: 1px solid $beige-100;
+  }
+}
+
+.pot-card__menu-item--danger {
+  color: $red;
+}
+
+/*Delete modal*/ 
+
+.delete-modal {
+  position: fixed;
+  inset: 0;
+  z-index: 1000;
+
+ 
+}
+
+/* BACKDROP */
+.delete-modal__overlay {
+  position: absolute;
+  inset: 0;
+  background-color: rgba(0, 0, 0, 0.4);
+}
+
+/* CONTENT */
+.delete-modal__content {
+  position: relative;
+  background-color: $white;
+  width: 100%;
+  max-width: 480px;
+  margin: auto;
+  padding: 32px;
+  border-radius: 12px;
+  box-shadow: 0 24px 48px rgba(0, 0, 0, 0.18);
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  top: 50%;
+  transform: translateY(-50%);
+}
+
+/* CLOSE */
+.delete-modal__close {
+  position: absolute;
+  top: 16px;
+  right: 16px;
+  background: none;
+  border: none;
+  cursor: pointer;
+
+  img {
+    width: 20px;
+    height: 20px;
+  }
+}
+
+/* TITLE */
+.delete-modal__title {
+  @include text-preset-2;
+  color: $grey-900;
+}
+
+/* TEXT */
+.delete-modal__text {
+  @include text-preset-4;
+  color: $grey-600;
+  line-height: 1.5;
+}
+
+/* CONFIRM */
+.delete-modal__confirm {
+  background-color: $red;
+  color: $white;
+  border: none;
+  border-radius: 8px;
+  padding: 14px;
+  cursor: pointer;
+
+  @include text-preset-4-bold;
+
+  &:hover {
+    opacity: 0.9;
+  }
+}
+
+/* CANCEL */
+.delete-modal__cancel {
+  background: none;
+  border: none;
+  cursor: pointer;
+  text-align: center;
+
+  @include text-preset-4;
+  color: $grey-600;
+
+  &:hover {
+    color: $grey-900;
+  }
+}
+
+/* AddPotModal*/
+
+/* overlay */
+.pots-modal__overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.45);
+  z-index: 1000;
+  
+}
+
+/* modal */
+.pots-modal {
+  position: fixed;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
+  width: 640px;
+  max-width: calc(100% - 2rem);
+  background: $white;
+  border-radius: 16px;
+  padding: 2rem;
+  z-index: 1001;
+  
+}
+
+.pots-modal__header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.pots-modal__title {
+  @include text-preset-1;
+  color: $grey-900;
+}
+
+.pots-modal__close {
+  border: none;
+  background: transparent;
+  cursor: pointer;
+  border-radius: 10px;
+
+  img {
+    width: 24px;
+    height: 24px;
+  }
+}
+
+.pots-modal__desc {
+  margin: 1rem 0 2rem;
+  @include text-preset-4;
+  color: $grey-600;
+}
+
+.pots-modal__field {
+  display: flex;
+  flex-direction: column;
+  gap: 0.6rem;
+  margin-bottom: 1.35rem;
+}
+
+.pots-modal__label {
+  @include text-preset-4-bold;
+  color: $grey-600;
+}
+
+/* inputs */
+.pots-modal__input {
+  width: 100%;
+  border: 1px solid $beige-500;
+  border-radius: 12px;
+  padding: 0.9rem 1rem;
+  outline: none;
+  @include text-preset-4;
+  color: $grey-900;
+  &::placeholder {
+    color: $grey-600;
+  }
+}
+
+.pots-modal__hint {
+  @include text-preset-5;
+  color: $grey-600;
+  align-self: flex-end;
+}
+
+/* money input */
+.pots-modal__money-input {
+  display: flex;
+  align-items: center;
+  gap: 0.65rem;
+  border: 1px solid $beige-500;
+  border-radius: 12px;
+  padding: 0.9rem 1rem;
+}
+
+.pots-modal__currency {
+  color: $grey-600;
+}
+
+.pots-modal__money {
+  width: 100%;
+  border: none;
+  outline: none;
+  background: transparent;
+  @include text-preset-4;
+  color: $grey-900;
+  &::placeholder {
+    color: $grey-600;
+  }
+}
+
+/* submit */
+.pots-modal__submit {
+  width: 100%;
+  margin-top: 0.4rem;
+  border: none;
+  border-radius: 12px;
+  padding: 1rem;
+  background: $grey-900;
+  color: $white;
+
+  @include text-preset-4-bold;
+  cursor: pointer;
+}
+
+/* dropdown */
+.pots-dropdown {
+  position: relative;
+}
+
+.pots-dropdown__btn {
+  width: 100%;
+  border: 1px solid $beige-500;
+  border-radius: 12px;
+  background: $white;
+  padding: 0.9rem 1rem;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.pots-dropdown__value {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.75rem;
+}
+
+.pots-dropdown__text {
+  @include text-preset-4;
+}
+
+.pots-dropdown__menu {
+  position: absolute;
+  top: calc(100% + 0.55rem);
+  left: 0;
+  width: 100%;
+  background: $white;
+  border-radius: 14px;
+  padding: 0.5rem;
+  box-shadow: 0 20px 50px rgba(0, 0, 0, 0.18);
+  z-index: 10;
+  max-height: 240px;
+  overflow-y: auto;
+}
+
+.pots-dropdown__item {
+  width: 100%;
+  border: none;
+  background: transparent;
+  cursor: pointer;
+  padding: 0.9rem 0.85rem;
+  border-radius: 12px;
+  display: flex;
+  align-items: center;
+  gap: 0.85rem;
+  text-align: left;
+
+  &:hover {
+    background: $beige-100;
+  }
+}
+
+
+.color-dot {
+  width: 14px;
+  height: 14px;
+  border-radius: 999px;
+  display: inline-block;
+  flex: 0 0 14px;
+}
+
+.color-dot--green { background: $green; }
+.color-dot--yellow { background: $yellow; }
+.color-dot--cyan { background: $cyan; }
+.color-dot--navy { background: $navy; }
+
+.color-dot--red { background: $red; }
+.color-dot--purple { background: $purple; }
+.color-dot--turquoise { background: $turquoise; }
+.color-dot--brown { background: $brown; }
+
+.color-dot--magenta { background: $magenta; }
+.color-dot--blue { background: $blue; }
+.color-dot--army-green { background: $army-green; }
+.color-dot--gold { background: $gold; }
+.color-dot--orange { background: $orange; }
+
+
+/*Pot amounts modal*/
+
+
+
+/* overlay */
+.pot-amount-modal__overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.45);
+  z-index: 1000;
+}
+
+/* modal */
+.pot-amount-modal {
+  position: fixed;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
+  width: 640px;
+  max-width: calc(100% - 2rem);
+  background: $white;
+  border-radius: 16px;
+  padding: 2rem;
+
+  z-index: 1001;
+}
+
+/* header */
+.pot-amount-modal__header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.pot-amount-modal__title {
+  @include text-preset-1;
+  color: $grey-900;
+}
+
+.pot-amount-modal__close {
+  border: none;
+  background: transparent;
+  cursor: pointer;
+}
+
+/* description */
+.pot-amount-modal__desc {
+  margin: 1rem 0 2rem;
+  @include text-preset-4;
+  color: $grey-600;
+}
+
+/* top row */
+.pot-amount-modal__top {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 14px;
+}
+
+.pot-amount-modal__label {
+  @include text-preset-4;
+  color: $grey-600;
+}
+
+.pot-amount-modal__value {
+  @include text-preset-1;
+  color: $grey-900;
+}
+
+/* progress */
+.pot-amount-modal__bar {
+  height: 10px;
+  border-radius: 999px;
+  background: $beige-100;
+  overflow: hidden;
+}
+
+.pot-amount-modal__bar-fill {
+  height: 100%;
+  border-radius: inherit;
+
+  &--add {
+    background: $green;
+  }
+
+  &--withdraw {
+    background: $red;
+  }
+}
+
+.pot-amount-modal__meta {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 10px;
+}
+
+.pot-amount-modal__percent {
+  @include text-preset-4-bold;
+
+  &--add {
+    color: $green;
+  }
+
+  &--withdraw {
+    color: $red;
+  }
+}
+
+.pot-amount-modal__target {
+  @include text-preset-5;
+  color: $grey-600;
+}
+
+/* input */
+.pot-amount-modal__field {
+  margin-top: 24px;
+}
+
+.pot-amount-modal__field-label {
+  display: block;
+  margin-bottom: 8px;
+  @include text-preset-4-bold;
+  color: $grey-600;
+}
+
+.pot-amount-modal__money-input {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  border: 1px solid $grey-300;
+  border-radius: 12px;
+  padding: 0.9rem 1rem;
+}
+
+.pot-amount-modal__currency {
+  color: $grey-600;
+}
+
+.pot-amount-modal__input {
+  width: 100%;
+  border: none;
+  outline: none;
+  @include text-preset-4;
+}
+
+/* submit */
+.pot-amount-modal__submit {
+  width: 100%;
+  margin-top: 24px;
+
+  border: none;
+  border-radius: 12px;
+  padding: 1rem;
+
+  background: $grey-900;
+  color: $white;
+
+  @include text-preset-4-bold;
+  cursor: pointer;
+}

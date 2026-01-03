@@ -38,7 +38,6 @@
 }
 
 
-
 .budgets-page__content {
   display: flex;
   gap: 20px;
@@ -397,7 +396,7 @@
   position: fixed;
   inset: 0;
   z-index: 1000;
-  display: none;
+ 
 }
 
 /* BACKDROP */
@@ -417,11 +416,9 @@
   padding: 32px;
   border-radius: 12px;
   box-shadow: 0 24px 48px rgba(0, 0, 0, 0.18);
-
   display: flex;
   flex-direction: column;
   gap: 20px;
-
   top: 50%;
   transform: translateY(-50%);
 }
@@ -477,10 +474,8 @@
   border: none;
   cursor: pointer;
   text-align: center;
-
   @include text-preset-4;
   color: $grey-600;
-
   &:hover {
     color: $grey-900;
   }
@@ -494,24 +489,20 @@
   inset: 0;
   background: rgba(0, 0, 0, 0.45);
   z-index: 1000;
-  display: none;
 }
 
 /* container */
 .budget-modal {
-  display: none;
+ 
   position: fixed;
   left: 50%;
   top: 50%;
   transform: translate(-50%, -50%);
-
   width: 640px;
   max-width: calc(100% - 2rem);
-
   background: #fff;
   border-radius: 16px;
   padding: 2rem;
-
   z-index: 1001;
 }
 
@@ -533,10 +524,7 @@
   background: transparent;
   cursor: pointer;
   border-radius: 10px;
-  
-
   img {
-   
     width: 24px;
     height: 24px;
   }
@@ -561,7 +549,7 @@
   color: $grey-600;
 }
 
-/* money input (UI only) */
+/* money input */
 .budget-modal__money-input {
   display: flex;
   align-items: center;
@@ -588,14 +576,11 @@
 .budget-modal__submit {
   width: 100%;
   margin-top: 0.4rem;
-
   border: none;
   border-radius: 12px;
   padding: 1rem;
-
   background: $grey-900;
   color: #fff;
-
   font-weight: 700;
   font-size: 1rem;
   cursor: pointer;
@@ -611,10 +596,8 @@
   border: 1px solid #cfcfcf;
   border-radius: 12px;
   background: #fff;
-
   padding: 0.9rem 1rem;
   cursor: pointer;
-
   display: flex;
   align-items: center;
   justify-content: space-between;
@@ -650,16 +633,12 @@
   border: none;
   background: transparent;
   cursor: pointer;
-
   padding: 0.9rem 0.85rem;
   border-radius: 12px;
-
   display: flex;
   align-items: center;
   gap: 0.85rem;
- 
   text-align: left;
-
   &:hover {
     background: #f3f3f3;
   }
@@ -674,7 +653,7 @@
   flex: 0 0 14px;
 }
 
-/* map to your SCSS vars */
+/* map to SCSS vars */
 .color-dot--green { background: $green; }
 .color-dot--yellow { background: $yellow; }
 .color-dot--cyan { background: $cyan; }

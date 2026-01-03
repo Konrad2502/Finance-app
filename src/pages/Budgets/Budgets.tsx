@@ -5,6 +5,7 @@ import ArrowRight from "../../assets/images/icon-caret-right.svg";
 import Avatar from "../../assets/images/avatars/daniel-carter.jpg";
 import DeleteModal from "./DeleteModal";
 import EditModal from "./EditModal";
+// import { FaOpencart } from "react-icons/fa6";
 
 type BudgetTypes = {
   id: number;
@@ -21,6 +22,8 @@ const mockBudgets: BudgetTypes[] = [
   { id: 4, name: "Personal Care", color: "navy" },
 ];
 
+type ModalType = "delete" | "edit" | null;
+
 export default function Budgets() {
   const [openMenu, setOpenMenu] = useState<BudgetAction>(null);
   const menuRef = useRef<HTMLDivElement | null>(null);
@@ -33,9 +36,27 @@ export default function Budgets() {
       }
     };
 
-    document.addEventListener("mousedown", handleClickOutside);
-    return () => document.removeEventListener("mousedown", handleClickOutside);
+    document.addEventListener("click", handleClickOutside);
+    return () => document.removeEventListener("click", handleClickOutside);
   }, []);
+
+  const [openModal, setOpenModal] = useState<ModalType>(null);
+
+  const openEditModal = () => {
+    setOpenModal("edit");
+    console.log("edit");
+  };
+
+  const openDeleteModal = () => {
+    console.log("edit dziala");
+
+    setOpenModal("delete");
+  };
+  const closeModal = () => {
+    console.log("close dziala");
+
+    setOpenModal(null);
+  };
 
   return (
     <main className="budgets-page">
@@ -110,7 +131,11 @@ export default function Budgets() {
                   <h3 className="budget-card__name">{budget.name}</h3>
                 </div>
 
-                <div className="budget-card__menu" ref={menuRef}>
+                <div
+                  className="budget-card__menu"
+                  ref={menuRef}
+                  onClick={(e) => e.stopPropagation()}
+                >
                   <button
                     type="button"
                     className="budget-card__menu-btn"
@@ -125,13 +150,18 @@ export default function Budgets() {
 
                   {openMenu === budget.id && (
                     <div className="budget-card__menu-dropdown">
-                      <button type="button" className="budget-card__menu-item">
+                      <button
+                        type="button"
+                        className="budget-card__menu-item"
+                        onClick={openEditModal}
+                      >
                         Edit Budget
                       </button>
 
                       <button
                         type="button"
                         className="budget-card__menu-item budget-card__menu-item--danger"
+                        onClick={openDeleteModal}
                       >
                         Delete Budget
                       </button>
@@ -247,8 +277,9 @@ export default function Budgets() {
           ))}
         </div>
       </section>
-      <DeleteModal />
-      <EditModal />
+      {openModal === "delete" && <DeleteModal closeModal={closeModal} />}
+
+      {openModal === "edit" && <EditModal closeModal={closeModal} />}
     </main>
   );
 }

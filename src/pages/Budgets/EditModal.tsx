@@ -41,8 +41,11 @@ const colorOptions = [
 type CategoryOption = (typeof categoryOptions)[number];
 type ColorOption = (typeof colorOptions)[number]["value"];
 type DropdownType = "category" | "color" | null;
+type EditModalProps = {
+  closeModal: () => void;
+};
 
-export default function EditModal() {
+export default function EditModal({ closeModal }: EditModalProps) {
   const [categoryValue, setCategoryValue] =
     useState<CategoryOption>("Entertainment");
   const [colorValue, setColorValue] = useState<ColorOption>("green");
@@ -89,7 +92,11 @@ export default function EditModal() {
         <header className="budget-modal__header">
           <h2 className="budget-modal__title">Add New Budget</h2>
 
-          <button type="button" className="budget-modal__close">
+          <button
+            onClick={closeModal}
+            type="button"
+            className="budget-modal__close"
+          >
             <img src={CloseBtn} alt="Close modal" />
           </button>
         </header>
