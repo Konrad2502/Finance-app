@@ -26,10 +26,6 @@ const colorOptions = [
 type ColorOption = (typeof colorOptions)[number]["value"];
 type OpenColor = "active" | null;
 
-// type AddPotModalProps = {
-//   closeModal: () => void;
-// };
-
 type AddPotModalProps = {
   title: string;
   charMax: number;

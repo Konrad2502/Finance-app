@@ -1,1 +1,290 @@
-@import '../../styles/settings';
+@import "../../styles/settings";
+
+
+.bills-page {
+  flex: 1;
+  padding: 40px 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 30px;
+  background-color: $beige-100;
+}
+
+.bills-page__title {
+  @include text-preset-1;
+}
+
+/* LAYOUT */
+.bills-page__content {
+  display: flex;
+  gap: 24px;
+ 
+  height: 100%;
+}
+
+/* LEFT */
+.bills-page__left {
+  flex: 2;
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+/* total card (dark) */
+.bills-summary {
+  background-color: $grey-900;
+  color: $white;
+  border-radius: 12px;
+  padding: 24px;
+  min-height: 160px;
+
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  justify-content: center;
+
+  img {
+    width: 28px;
+    height: 28px;
+  }
+
+  span {
+    @include text-preset-5;
+    opacity: 0.9;
+  }
+
+  strong {
+    @include text-preset-1;
+    letter-spacing: 0.5px;
+  }
+}
+
+/* summary card  */
+.bills-summary-card {
+  background-color: $white;
+  border-radius: 12px;
+  padding: 24px;
+
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+
+  h3 {
+    @include text-preset-2;
+  }
+}
+
+.bills-summary-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+
+  padding: 14px 0;
+  border-top: 1px solid $beige-100;
+
+  span {
+    @include text-preset-5;
+    color: $grey-600;
+  }
+
+  strong {
+    @include text-preset-4-bold;
+    color: $grey-900;
+  }
+}
+
+.bills-summary-row--danger {
+  span,
+  strong {
+    color: $red;
+  }
+}
+
+/* RIGHT */
+.bills-page__right {
+  flex: 5;
+  background-color: $white;
+  border-radius: 12px;
+  padding: 24px;
+
+  display: flex;
+  flex-direction: column;
+  gap: 22px;
+  min-height: 0;
+}
+
+/* INPUTS ROW */
+.bills-page__inputs {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 20px;
+}
+
+
+.bills-page__search {
+  position: relative;
+}
+
+.bills-page__search-input {
+  width: 320px;
+  padding: 12px 40px 12px 16px;
+  border-radius: 8px;
+  border: 1px solid $beige-100;
+  @include text-preset-4;
+}
+
+.bills-page__search-icon {
+  position: absolute;
+  right: 12px;
+  top: 50%;
+  transform: translateY(-50%);
+  color: $grey-600;
+}
+
+/* SORT */
+.bills-page__sort {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  position: relative;
+
+  span {
+    @include text-preset-5;
+    color: $grey-600;
+  }
+}
+
+.bills-page__sort-btn {
+  padding: 10px 16px;
+  border-radius: 8px;
+  border: 1px solid $beige-100;
+  background-color: $white;
+  cursor: pointer;
+
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  span {
+ @include text-preset-4;
+ color: #000000;
+  }
+
+ 
+
+  img {
+    width: 14px;
+    height: 14px;
+    transition: transform 200ms ease;
+  }
+}
+
+.bills-page__rotate {
+transform: rotate(180deg);
+}
+
+/* DROPDOWN */
+.bills-page__dropdown {
+  position: absolute;
+  top: calc(100% + 10px);
+  right: 0;
+  width: 180px;
+  background-color: $white;
+  border-radius: 10px;
+  box-shadow: 0 12px 24px rgba(0, 0, 0, 0.12);
+  overflow: hidden;
+  z-index: 20;
+}
+
+.bills-page__dropdown-item {
+  width: 100%;
+  text-align: left;
+  padding: 14px 16px;
+  border: none;
+  background-color: transparent;
+  cursor: pointer;
+  @include text-preset-4;
+
+  &:not(:last-child) {
+    border-bottom: 1px solid $beige-100;
+  }
+
+  &:hover {
+    background-color: $beige-100;
+  }
+}
+
+.bills-page__dropdown-item--active {
+  @include text-preset-4-bold;
+}
+
+/* LIST */
+.bills-page__list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+}
+
+.bills-page__row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex: 1;
+  padding: 18px 0;
+  border-top: 1px solid $beige-100;
+}
+
+/* left part: avatar + name */
+.bills-page__bill {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  flex: 4;
+
+  img {
+    width: 36px;
+    height: 36px;
+    border-radius: 50%;
+    object-fit: cover;
+  }
+
+  span {
+    @include text-preset-4-bold;
+    color: $grey-900;
+  }
+}
+
+/* middle: due date + status icon */
+.bills-page__due {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 10px;
+  flex: 2;
+
+  span {
+    @include text-preset-5;
+    color: $grey-600;
+  }
+
+  img {
+    width: 16px;
+    height: 16px;
+  }
+}
+
+
+.bills-page__amount {
+  flex: 1;
+  text-align: right;
+  @include text-preset-4-bold;
+  color: $grey-900;
+}
+
+.bills-page__amount--danger {
+  color: $red;
+}
+
