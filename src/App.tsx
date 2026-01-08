@@ -7,8 +7,20 @@ import Transactions from "./pages/Transactions/Transactions";
 import Budgets from "./pages/Budgets/Budgets";
 import Pots from "./pages/Pots/Pots";
 import Bills from "./pages/Bills/Bills";
+import { useEffect } from "react";
+import { useAppDispatch, useAppSelector } from "./store/hooks";
+import { fetchAppData } from "./features/appData/appDataSlice";
+import { selectAppDataStatus } from "./features/appData/appDataSelectors";
 
 function App() {
+  const dispatch = useAppDispatch();
+  const status = useAppSelector(selectAppDataStatus);
+
+  useEffect(() => {
+    if (status === "idle") {
+      dispatch(fetchAppData());
+    }
+  }, [status, dispatch]);
   return (
     <Container>
       <Routes>

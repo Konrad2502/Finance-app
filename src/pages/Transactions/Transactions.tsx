@@ -1,8 +1,10 @@
 import "./Transactions.scss";
 import Arrow from "../../assets/images/icon-caret-left.svg";
 import { CiSearch } from "react-icons/ci";
-import { useState, useEffect, useRef } from "react";
-import Avatar from "../../assets/images/avatars/aqua-flow-utilities.jpg";
+import { useState, useEffect, useRef, useMemo } from "react";
+
+import { useAppSelector } from "../../store/hooks";
+import { selectAllTransaction } from "../../features/appData/appDataSelectors";
 
 const ITEMS_PER_PAGE = 10;
 
@@ -33,26 +35,48 @@ type SortOption = (typeof sortOptions)[number];
 type CategoryOption = (typeof categoryOptions)[number];
 type DropdownType = "sort" | "category" | null;
 
-const mockTransactions = Array.from({ length: 50 }, (_, i) => ({
-  id: i + 1,
-  name: `User ${i + 1}`,
-  category: "General",
-  date: "19 Aug 2024",
-  amount: i % 2 === 0 ? "+$75.50" : "-$42.30",
-}));
-
 export default function Transactions() {
   const [currentPage, setCurrentPage] = useState(1);
   const [sortValue, setSortValue] = useState<SortOption>("Latest");
   const [categoryValue, setCategoryValue] =
     useState<CategoryOption>("All Transactions");
   const [openDropdown, setOpenDropdown] = useState<DropdownType>(null);
+  const [searchValue, setSearchValue] = useState("");
 
   const dropdownRef = useRef<HTMLDivElement | null>(null);
 
-  const totalPages = Math.ceil(mockTransactions.length / ITEMS_PER_PAGE);
+  const allTransactions = useAppSelector(selectAllTransaction);
+  const filteredByCategory =
+    categoryValue === "All Transactions"
+      ? allTransactions
+      : allTransactions.filter((item) => item.category === categoryValue);
+  const filteredBySearch = filteredByCategory.filter((item) =>
+    item.name.toLowerCase().includes(searchValue.toLowerCase())
+  );
+  const sortedTransactions = useMemo(() => {
+    return [...filteredBySearch].sort((a, b) => {
+      switch (sortValue) {
+        case "Latest":
+          return +new Date(b.date) - +new Date(a.date);
+        case "Oldest":
+          return +new Date(a.date) - +new Date(b.date);
+        case "A to Z":
+          return a.name.localeCompare(b.name);
+        case "Z to A":
+          return b.name.localeCompare(a.name);
+        case "Highest":
+          return b.amount - a.amount;
+        case "Lowest":
+          return a.amount - b.amount;
+        default:
+          return 0;
+      }
+    });
+  }, [filteredBySearch, sortValue]);
+
+  const totalPages = Math.ceil(sortedTransactions.length / ITEMS_PER_PAGE);
   const startIndex = (currentPage - 1) * ITEMS_PER_PAGE;
-  const currentItems = mockTransactions.slice(
+  const currentItems = sortedTransactions.slice(
     startIndex,
     startIndex + ITEMS_PER_PAGE
   );
@@ -83,6 +107,8 @@ export default function Transactions() {
               type="text"
               placeholder="Search transaction"
               className="transactions-page__search-input"
+              value={searchValue}
+              onChange={(e) => setSearchValue(e.target.value)}
             />
             <CiSearch className="transactions-page__search-icon" />
           </div>
@@ -197,34 +223,44 @@ export default function Transactions() {
         </div>
 
         {/* LIST */}
+
         <ul className="transactions-page__list">
-          {currentItems.map((item) => (
-            <li key={item.id} className="transactions-page__row">
-              <div className="transactions-page__user">
-                <img
-                  src={Avatar}
-                  alt=""
-                  className="transactions-page__avatar"
-                />
-                <span className="transactions-page__name">{item.name}</span>
-              </div>
+          {currentItems.map((item) => {
+            const isPositive = item.amount > 0;
+            const sign = isPositive ? "+" : "-";
+            const formatted = Math.abs(item.amount).toFixed(2);
+            const formattedDate = new Date(item.date).toLocaleDateString(
+              "en-GB"
+            );
 
-              <span className="transactions-page__category">
-                {item.category}
-              </span>
-              <span className="transactions-page__date">{item.date}</span>
+            return (
+              <li key={item.id} className="transactions-page__row">
+                <div className="transactions-page__user">
+                  <img
+                    src={item.avatar}
+                    alt=""
+                    className="transactions-page__avatar"
+                  />
+                  <span className="transactions-page__name">{item.name}</span>
+                </div>
 
-              <span
-                className={`transactions-page__amount ${
-                  item.amount.startsWith("+")
-                    ? "transactions-page__amount--positive"
-                    : "transactions-page__amount--negative"
-                }`}
-              >
-                {item.amount}
-              </span>
-            </li>
-          ))}
+                <span className="transactions-page__category">
+                  {item.category}
+                </span>
+                <span className="transactions-page__date">{formattedDate}</span>
+
+                <span
+                  className={`transactions-page__amount ${
+                    isPositive
+                      ? "transactions-page__amount--positive"
+                      : "transactions-page__amount--negative"
+                  }`}
+                >
+                  {sign}${formatted}
+                </span>
+              </li>
+            );
+          })}
         </ul>
 
         {/* PAGINATION */}

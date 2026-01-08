@@ -1,24 +1,36 @@
 import "./Overview.scss";
 import NextArrow from "../../assets/images/icon-caret-right.svg";
 import PotIcon from "../../assets/images/icon-pot.svg";
-import Avatar from "../../assets/images/avatars/daniel-carter.jpg";
+import { useAppSelector } from "../../store/hooks";
+import {
+  selectAppData,
+  selectRecentTransactions,
+} from "../../features/appData/appDataSelectors";
+import { useNavigate } from "react-router-dom";
 
 export default function Overview() {
+  const data = useAppSelector(selectAppData);
+  const balance = data?.balance;
+
+  const recentTransactions = useAppSelector(selectRecentTransactions);
+
+  const navigate = useNavigate();
+
   return (
     <main className="overview">
       <h1 className="overview__title">Overview</h1>
       <div className="overview__summary">
         <div className="overview__item overview__item--active">
           <p className="overview__item-label">Current Balance</p>
-          <p className="overview__item-amount">$4,836,00</p>
+          <p className="overview__item-amount">{`$${balance?.current}`}</p>
         </div>
         <div className="overview__item">
           <p className="overview__item-label">Income</p>
-          <p className="overview__item-amount">$4,836,00</p>
+          <p className="overview__item-amount">{`$${balance?.income}`}</p>
         </div>
         <div className="overview__item">
           <p className="overview__item-label">Expenses</p>
-          <p className="overview__item-amount">$4,836,00</p>
+          <p className="overview__item-amount">{`$${balance?.expenses}`}</p>
         </div>
       </div>
       <div className="overview__main">
@@ -81,7 +93,13 @@ export default function Overview() {
           <div className="transactions">
             <div className="transactions__heading">
               <h3 className="transactions__heading-title">Transactions</h3>
-              <button className="transactions__heading-btn" type="button">
+              <button
+                onClick={() => {
+                  navigate("transactions");
+                }}
+                className="transactions__heading-btn"
+                type="button"
+              >
                 <span className="transactions__heading-btnText">View all</span>
                 <img
                   className="transactions__heading-btnIcon"
@@ -93,90 +111,32 @@ export default function Overview() {
             </div>
             <div className="transactions__content">
               <ul className="transactions__list">
-                <li className="transactions__item">
-                  <div className="transactions__item-left">
-                    <img
-                      className="transactions__avatar"
-                      src={Avatar}
-                      alt="Daniel Carter"
-                    />
-                    <p className="transactions__name">Daniel Carter</p>
-                  </div>
-                  <div className="transactions__item-right">
-                    <p className="transactions__amount transactions__amount--positive">
-                      +$75.50
-                    </p>
-                    <p className="transactions__date">19 Aug 2024</p>
-                  </div>
-                </li>
-
-                <li className="transactions__item">
-                  <div className="transactions__item-left">
-                    <img
-                      className="transactions__avatar"
-                      src={Avatar}
-                      alt="Daniel Carter"
-                    />
-                    <p className="transactions__name">Savory Bites Bistro</p>
-                  </div>
-                  <div className="transactions__item-right">
-                    <p className="transactions__amount transactions__amount--negative">
-                      -$55.50
-                    </p>
-                    <p className="transactions__date">19 Aug 2024</p>
-                  </div>
-                </li>
-
-                <li className="transactions__item">
-                  <div className="transactions__item-left">
-                    <img
-                      className="transactions__avatar"
-                      src={Avatar}
-                      alt="Daniel Carter"
-                    />
-                    <p className="transactions__name">Daniel Carter</p>
-                  </div>
-                  <div className="transactions__item-right">
-                    <p className="transactions__amount transactions__amount--negative">
-                      -$42.30
-                    </p>
-                    <p className="transactions__date">18 Aug 2024</p>
-                  </div>
-                </li>
-
-                <li className="transactions__item">
-                  <div className="transactions__item-left">
-                    <img
-                      className="transactions__avatar"
-                      src={Avatar}
-                      alt="Daniel Carter"
-                    />
-                    <p className="transactions__name">Sun Park</p>
-                  </div>
-                  <div className="transactions__item-right">
-                    <p className="transactions__amount transactions__amount--positive">
-                      +$120.00
-                    </p>
-                    <p className="transactions__date">17 Aug 2024</p>
-                  </div>
-                </li>
-
-                <li className="transactions__item">
-                  <div className="transactions__item-left">
-                    <img
-                      className="transactions__avatar"
-                      src={Avatar}
-                      alt="Daniel Carter"
-                    />
-                    <p className="transactions__name">Urban Services Hub</p>
-                  </div>
-                  <div className="transactions__item-right">
-                    <p className="transactions__amount transactions__amount--negative">
-                      -$65.00
-                    </p>
-                    <p className="transactions__date">17 Aug 2024</p>
-                  </div>
-                </li>
+                {recentTransactions.map((item) => {
+                  const formattedDate = new Date(item.date).toLocaleDateString(
+                    "en-GB"
+                  );
+                  return (
+                    <li key={item.id} className="transactions__item">
+                      <div className="transactions__item-left">
+                        <img
+                          className="transactions__avatar"
+                          src={item.avatar}
+                          alt="Daniel Carter"
+                        />
+                        <p className="transactions__name">{item.name}</p>
+                      </div>
+                      <div className="transactions__item-right">
+                        <p className="transactions__amount transactions__amount--positive">
+                          {(item.amount > 0 ? "+" : "-") +
+                            "$" +
+                            Math.abs(item.amount).toFixed(2)}
+                        </p>
+                        <p className="transactions__date">{formattedDate}</p>
+                      </div>
+                    </li>
+                  );
+                })}
+                ;
               </ul>
             </div>
           </div>
