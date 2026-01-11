@@ -42,6 +42,8 @@ type CategoryOption = (typeof categoryOptions)[number];
 type ColorOption = (typeof colorOptions)[number]["value"];
 type DropdownType = "category" | "color" | null;
 type EditModalProps = {
+  title: string;
+  text: string;
   closeModal: () => void;
 };
 

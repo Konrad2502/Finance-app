@@ -2,32 +2,21 @@ import "./Budgets.scss";
 import { useEffect, useRef, useState } from "react";
 import DotsIcon from "../../assets/images/icon-ellipsis.svg";
 import ArrowRight from "../../assets/images/icon-caret-right.svg";
-import Avatar from "../../assets/images/avatars/daniel-carter.jpg";
 import DeleteModal from "./DeleteModal";
 import EditModal from "./EditModal";
+import { useAppSelector } from "../../store/hooks";
+import { budgetsWithTransactions } from "../../features/budgetSlice/budgetSelectors";
+import { useNavigate } from "react-router-dom";
 // import { FaOpencart } from "react-icons/fa6";
 
-type BudgetTypes = {
-  id: number;
-  name: string;
-  color: "green" | "cyan" | "yellow" | "navy";
-};
-
 type BudgetAction = number | null;
-
-const mockBudgets: BudgetTypes[] = [
-  { id: 1, name: "Entertainment", color: "green" },
-  { id: 2, name: "Bills", color: "cyan" },
-  { id: 3, name: "Dining Out", color: "yellow" },
-  { id: 4, name: "Personal Care", color: "navy" },
-];
-
-type ModalType = "delete" | "edit" | null;
+type ModalType = "delete" | "edit" | "add" | null;
 
 export default function Budgets() {
   const [openMenu, setOpenMenu] = useState<BudgetAction>(null);
   const menuRef = useRef<HTMLDivElement | null>(null);
 
+  const navigate = useNavigate();
   /* close dropdown on outside click */
   useEffect(() => {
     const handleClickOutside = (e: MouseEvent) => {
@@ -42,21 +31,43 @@ export default function Budgets() {
 
   const [openModal, setOpenModal] = useState<ModalType>(null);
 
-  const openEditModal = () => {
-    setOpenModal("edit");
-    console.log("edit");
+  const openEditModal = (type: ModalType) => {
+    setOpenModal(type);
   };
 
   const openDeleteModal = () => {
-    console.log("edit dziala");
-
     setOpenModal("delete");
   };
-  const closeModal = () => {
-    console.log("close dziala");
 
+  const closeModal = () => {
     setOpenModal(null);
   };
+
+  const { items, totalSpent, totalLimit } = useAppSelector(
+    budgetsWithTransactions
+  );
+  console.log(items, totalLimit, totalSpent);
+
+  const donutGradient = items
+    .reduce<{
+      parts: string[];
+      offset: number;
+    }>(
+      (acc, { budget }) => {
+        if (budget.maximum <= 0 || totalLimit <= 0) return acc;
+
+        const percent = (budget.maximum / totalLimit) * 100;
+        const start = acc.offset;
+        const end = start + percent;
+
+        acc.parts.push(`var(--${budget.theme}) ${start}% ${end}%`);
+
+        acc.offset = end;
+        return acc;
+      },
+      { parts: [], offset: 0 }
+    )
+    .parts.join(", ");
 
   return (
     <main className="budgets-page">
@@ -64,7 +75,11 @@ export default function Budgets() {
       <div className="budgets-page__heading">
         <h1 className="budgets-page__title">Budgets</h1>
 
-        <button className="budgets-page__btn" type="button">
+        <button
+          onClick={() => setOpenModal("add")}
+          className="budgets-page__btn"
+          type="button"
+        >
           <span className="budgets-page__btnIcon">+</span>
           <span className="budgets-page__btnText">Add New Budget</span>
         </button>
@@ -74,212 +89,194 @@ export default function Budgets() {
       <section className="budgets-page__content">
         {/* LEFT – SUMMARY */}
         <div className="budgets-summary">
-          <div className="budgets-summary__chart">
+          <div
+            className="budgets-summary__chart"
+            style={{
+              background: `conic-gradient(${donutGradient})`,
+            }}
+          >
             <div className="budgets-summary__chart-inner">
-              <p className="budgets-summary__amount">$338</p>
-              <p className="budgets-summary__label">of $975 limit</p>
+              <p className="budgets-summary__amount">
+                ${totalSpent.toFixed(0)}
+              </p>
+              <p className="budgets-summary__label">
+                of ${totalLimit.toFixed(0)} limit
+              </p>
             </div>
           </div>
 
           <h3 className="budgets-summary__title">Spending Summary</h3>
 
           <ul className="budgets-summary__list">
-            <li className="budgets-summary__item budgets-summary__item--green">
-              <span>Entertainment</span>
-              <div className="budgets-summary__wrapper">
-                <strong>$15.00</strong>
-                <span>of $50.00</span>
-              </div>
-            </li>
-
-            <li className="budgets-summary__item budgets-summary__item--cyan">
-              <span>Bills</span>
-              <div className="budgets-summary__wrapper">
-                <strong>$150.00</strong>
-                <span>of $750.00</span>
-              </div>
-            </li>
-
-            <li className="budgets-summary__item budgets-summary__item--yellow">
-              <span>Dining Out</span>
-              <div className="budgets-summary__wrapper">
-                <strong>$133.00</strong>
-                <span>of $75.00</span>
-              </div>
-            </li>
-
-            <li className="budgets-summary__item budgets-summary__item--navy">
-              <span>Personal Care</span>
-              <div className="budgets-summary__wrapper">
-                <strong>$40.00</strong>
-                <span>of $100.00</span>
-              </div>
-            </li>
+            {items.map(({ budget, spent }) => (
+              <li
+                key={budget.id}
+                className={`budgets-summary__item budgets-summary__item--${budget.theme}`}
+              >
+                <span>{budget.category}</span>
+                <div className="budgets-summary__wrapper">
+                  <strong>${spent.toFixed(2)}</strong>
+                  <span>of ${budget.maximum.toFixed(2)}</span>
+                </div>
+              </li>
+            ))}
           </ul>
         </div>
 
         {/* RIGHT – BUDGET CARDS */}
         <div className="budgets-list">
-          {mockBudgets.map((budget) => (
-            <article key={budget.id} className="budget-card">
-              {/* HEADER */}
-              <header className="budget-card__header">
-                <div className="budget-card__title">
-                  <span
-                    className={`budget-card__dot budget-card__dot--${budget.color}`}
-                  />
-                  <h3 className="budget-card__name">{budget.name}</h3>
-                </div>
+          {items.map(
+            ({ budget, spent, remaining, progress, recentTransactions }) => (
+              <article key={budget.id} className="budget-card">
+                {/* HEADER */}
+                <header className="budget-card__header">
+                  <div className="budget-card__title">
+                    <span
+                      className={`budget-card__dot budget-card__dot--${budget.theme}`}
+                    />
+                    <h3 className="budget-card__name">{budget.category}</h3>
+                  </div>
 
-                <div
-                  className="budget-card__menu"
-                  ref={menuRef}
-                  onClick={(e) => e.stopPropagation()}
-                >
-                  <button
-                    type="button"
-                    className="budget-card__menu-btn"
-                    onClick={() =>
-                      setOpenMenu((prev) =>
-                        prev === budget.id ? null : budget.id
-                      )
-                    }
+                  <div
+                    className="budget-card__menu"
+                    ref={menuRef}
+                    onClick={(e) => e.stopPropagation()}
                   >
-                    <img src={DotsIcon} alt="" aria-hidden="true" />
-                  </button>
+                    <button
+                      type="button"
+                      className="budget-card__menu-btn"
+                      onClick={() =>
+                        setOpenMenu((prev) =>
+                          prev === budget.id ? null : budget.id
+                        )
+                      }
+                    >
+                      <img src={DotsIcon} alt="" aria-hidden="true" />
+                    </button>
 
-                  {openMenu === budget.id && (
-                    <div className="budget-card__menu-dropdown">
-                      <button
-                        type="button"
-                        className="budget-card__menu-item"
-                        onClick={openEditModal}
-                      >
-                        Edit Budget
-                      </button>
+                    {openMenu === budget.id && (
+                      <div className="budget-card__menu-dropdown">
+                        <button
+                          type="button"
+                          className="budget-card__menu-item"
+                          onClick={() => openEditModal("edit")}
+                        >
+                          Edit Budget
+                        </button>
 
-                      <button
-                        type="button"
-                        className="budget-card__menu-item budget-card__menu-item--danger"
-                        onClick={openDeleteModal}
-                      >
-                        Delete Budget
-                      </button>
-                    </div>
-                  )}
-                </div>
-              </header>
+                        <button
+                          type="button"
+                          className="budget-card__menu-item budget-card__menu-item--danger"
+                          onClick={openDeleteModal}
+                        >
+                          Delete Budget
+                        </button>
+                      </div>
+                    )}
+                  </div>
+                </header>
 
-              <p className="budget-card__limit">Maximum of $50.00</p>
+                <p className="budget-card__limit">
+                  Maximum of ${budget.maximum.toFixed(2)}
+                </p>
 
-              {/* BAR */}
-              <div className="budget-card__bar">
-                <div
-                  className={`budget-card__bar-fill budget-card__bar-fill--${budget.color}`}
-                />
-              </div>
-
-              {/* STATS */}
-              <div className="budget-card__stats">
-                <div
-                  className={`budget-card__stat budget-card__stat--${budget.color}`}
-                >
-                  <span className="budget-card__stat-label">Spent</span>
-                  <strong>$15.00</strong>
-                </div>
-
-                <div className="budget-card__stat">
-                  <span className="budget-card__stat-label">Remaining</span>
-                  <strong>$35.00</strong>
-                </div>
-              </div>
-
-              {/* LATEST */}
-              <div className="budget-card__latest">
-                <div className="budget-card__latest-header">
-                  <h4>Latest Spending</h4>
-
-                  <button type="button">
-                    <span>See All</span>
-                    <img src={ArrowRight} alt="" aria-hidden="true" />
-                  </button>
+                {/* BAR */}
+                <div className="budget-card__bar">
+                  <div
+                    className={`budget-card__bar-fill budget-card__bar-fill--${budget.theme}`}
+                    style={{ width: `${progress}%` }}
+                  />
                 </div>
 
-                <ul className="budget-card__transactions">
-                  <li className="budget-card__transaction">
-                    <div className="budget-card__transaction-left">
-                      <img
-                        src={Avatar}
-                        alt="James Thompson"
-                        className="budget-card__avatar"
-                      />
-                      <span className="budget-card__transaction-name">
-                        James Thompson
-                      </span>
-                    </div>
+                {/* STATS */}
+                <div className="budget-card__stats">
+                  <div
+                    className={`budget-card__stat budget-card__stat--${budget.theme}`}
+                  >
+                    <span className="budget-card__stat-label">Spent</span>
+                    <strong>${spent.toFixed(2)}</strong>
+                  </div>
 
-                    <div className="budget-card__transaction-right">
-                      <span className="budget-card__transaction-amount">
-                        -$5.00
-                      </span>
-                      <span className="budget-card__transaction-date">
-                        11 Aug 2024
-                      </span>
-                    </div>
-                  </li>
+                  <div className="budget-card__stat">
+                    <span className="budget-card__stat-label">Remaining</span>
+                    <strong>${remaining.toFixed(2)}</strong>
+                  </div>
+                </div>
 
-                  <li className="budget-card__transaction">
-                    <div className="budget-card__transaction-left">
-                      <img
-                        src={Avatar}
-                        alt="Pixel Playground"
-                        className="budget-card__avatar"
-                      />
-                      <span className="budget-card__transaction-name">
-                        Pixel Playground
-                      </span>
-                    </div>
+                {/* LATEST */}
+                <div className="budget-card__latest">
+                  <div className="budget-card__latest-header">
+                    <h4>Latest Spending</h4>
 
-                    <div className="budget-card__transaction-right">
-                      <span className="budget-card__transaction-amount">
-                        -$10.00
-                      </span>
-                      <span className="budget-card__transaction-date">
-                        11 Aug 2024
-                      </span>
-                    </div>
-                  </li>
+                    <button
+                      onClick={() => navigate("/transactions")}
+                      type="button"
+                    >
+                      <span>See All</span>
+                      <img src={ArrowRight} alt="" aria-hidden="true" />
+                    </button>
+                  </div>
 
-                  <li className="budget-card__transaction">
-                    <div className="budget-card__transaction-left">
-                      <img
-                        src={Avatar}
-                        alt="Rina Sato"
-                        className="budget-card__avatar"
-                      />
-                      <span className="budget-card__transaction-name">
-                        Rina Sato
-                      </span>
-                    </div>
+                  <ul className="budget-card__transactions">
+                    {recentTransactions.map((tr) => {
+                      const isPositive = tr.amount > 0;
+                      const sign = isPositive ? "+" : "-";
+                      const formattedAmount = Math.abs(tr.amount).toFixed(2);
+                      const formattedDate = new Date(
+                        tr.date
+                      ).toLocaleDateString("en-GB", {
+                        day: "2-digit",
+                        month: "short",
+                        year: "numeric",
+                      });
 
-                    <div className="budget-card__transaction-right">
-                      <span className="budget-card__transaction-amount">
-                        -$10.00
-                      </span>
-                      <span className="budget-card__transaction-date">
-                        13 Jul 2024
-                      </span>
-                    </div>
-                  </li>
-                </ul>
-              </div>
-            </article>
-          ))}
+                      return (
+                        <li key={tr.id} className="budget-card__transaction">
+                          <div className="budget-card__transaction-left">
+                            <img
+                              src={tr.avatar}
+                              alt={tr.name}
+                              className="budget-card__avatar"
+                            />
+                            <span className="budget-card__transaction-name">
+                              {tr.name}
+                            </span>
+                          </div>
+
+                          <div className="budget-card__transaction-right">
+                            <span className="budget-card__transaction-amount">
+                              {sign}${formattedAmount}
+                            </span>
+                            <span className="budget-card__transaction-date">
+                              {formattedDate}
+                            </span>
+                          </div>
+                        </li>
+                      );
+                    })}
+                  </ul>
+                </div>
+              </article>
+            )
+          )}
         </div>
       </section>
-      {openModal === "delete" && <DeleteModal closeModal={closeModal} />}
 
-      {openModal === "edit" && <EditModal closeModal={closeModal} />}
+      {openModal === "delete" && <DeleteModal closeModal={closeModal} />}
+      {openModal === "add" && (
+        <EditModal
+          title="Add New Pot"
+          text="Choose a category to set a spending budget.These categories can help you monitor spending"
+          closeModal={closeModal}
+        />
+      )}
+      {openModal === "edit" && (
+        <EditModal
+          title="Edit Budget"
+          text="As your budget change, feel free to update your spending limit"
+          closeModal={closeModal}
+        />
+      )}
     </main>
   );
 }

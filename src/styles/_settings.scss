@@ -95,3 +95,22 @@ $font-family: "Public Sans", system-ui, -apple-system, Segoe UI, Roboto, Arial, 
   @include text-preset-5;
   font-weight: 700;
 }
+
+
+:root {
+  --green: #{$green};
+  --yellow: #{$yellow};
+  --cyan: #{$cyan};
+  --navy: #{$navy};
+
+  --red: #{$red};
+  --purple: #{$purple};
+  --turquoise: #{$turquoise};
+  --brown: #{$brown};
+
+  --magenta: #{$magenta};
+  --blue: #{$blue};
+  --army-green: #{$army-green};
+  --gold: #{$gold};
+  --orange: #{$orange};
+}

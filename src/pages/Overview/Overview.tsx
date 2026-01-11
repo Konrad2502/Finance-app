@@ -7,12 +7,37 @@ import {
   selectRecentTransactions,
 } from "../../features/appData/appDataSelectors";
 import { useNavigate } from "react-router-dom";
+import { budgetsWithTransactions } from "../../features/budgetSlice/budgetSelectors";
 
 export default function Overview() {
   const data = useAppSelector(selectAppData);
   const balance = data?.balance;
 
   const recentTransactions = useAppSelector(selectRecentTransactions);
+  const { items, totalLimit, totalSpent } = useAppSelector(
+    budgetsWithTransactions
+  );
+
+  const donutGradient = items
+    .reduce<{
+      parts: string[];
+      offset: number;
+    }>(
+      (acc, { budget }) => {
+        if (budget.maximum <= 0 || totalLimit <= 0) return acc;
+
+        const percent = (budget.maximum / totalLimit) * 100;
+        const start = acc.offset;
+        const end = start + percent;
+
+        acc.parts.push(`var(--${budget.theme}) ${start}% ${end}%`);
+
+        acc.offset = end;
+        return acc;
+      },
+      { parts: [], offset: 0 }
+    )
+    .parts.join(", ");
 
   const navigate = useNavigate();
 
@@ -147,7 +172,11 @@ export default function Overview() {
           <div className="budgets">
             <div className="budgets__heading">
               <h3 className="budgets__heading-title">Budgets</h3>
-              <button className="budgets__heading-btn" type="button">
+              <button
+                onClick={() => navigate("budgets")}
+                className="budgets__heading-btn"
+                type="button"
+              >
                 <span className="budgets__heading-btnText">See details</span>
                 <img
                   className="budgets__heading-btnIcon"
@@ -160,35 +189,41 @@ export default function Overview() {
             <div className="budgets__content">
               {/* DONUT */}
               <div className="budgets__wrap">
-                <div className="budgets__chart">
+                <div
+                  className="budgets__chart"
+                  style={{
+                    background: `conic-gradient(${donutGradient})`,
+                  }}
+                >
                   <div className="budgets__chart-inner">
-                    <p className="budgets__chart-amount">$338</p>
-                    <p className="budgets__chart-label">of $975 limit</p>
+                    <p className="budgets__chart-amount">
+                      ${totalSpent.toFixed()}
+                    </p>
+                    <p className="budgets__chart-label">
+                      of ${totalLimit.toFixed()} limit
+                    </p>
                   </div>
                 </div>
               </div>
 
               {/* LEGEND */}
               <ul className="budgets__legend">
-                <li className="budgets__legend-item budgets__legend-item--green">
-                  <span className="budgets__legend-label">Entertainment</span>
-                  <span className="budgets__legend-amount">$50.00</span>
-                </li>
-
-                <li className="budgets__legend-item budgets__legend-item--cyan">
-                  <span className="budgets__legend-label">Bills</span>
-                  <span className="budgets__legend-amount">$750.00</span>
-                </li>
-
-                <li className="budgets__legend-item budgets__legend-item--yellow">
-                  <span className="budgets__legend-label">Dining Out</span>
-                  <span className="budgets__legend-amount">$75.00</span>
-                </li>
-
-                <li className="budgets__legend-item budgets__legend-item--navy">
-                  <span className="budgets__legend-label">Personal Care</span>
-                  <span className="budgets__legend-amount">$100.00</span>
-                </li>
+                {items.map((item) => {
+                  const budget = item.budget;
+                  return (
+                    <li
+                      key={budget.id}
+                      className={`budgets__legend-item budgets__legend-item--${budget.theme}`}
+                    >
+                      <span className="budgets__legend-label">
+                        {budget.category}
+                      </span>
+                      <span className="budgets__legend-amount">
+                        ${budget.maximum.toFixed(2)}
+                      </span>
+                    </li>
+                  );
+                })}
               </ul>
             </div>
           </div>
