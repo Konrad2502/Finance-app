@@ -210,6 +210,16 @@
   &--cyan { background-color: $cyan; }
   &--yellow { background-color: $yellow; }
   &--navy { background-color: $navy; }
+  &--red { background: $red; }
+&--purple { background: $purple; }
+&--turquoise { background: $turquoise; }
+&--brown { background: $brown; }
+
+&--magenta { background: $magenta; }
+&--blue { background: $blue; }
+&--army-green { background: $army-green; }
+&--gold { background: $gold; }
+&--orange { background: $orange; }
 }
 
 /* STATS */
@@ -221,6 +231,8 @@
   
 }
 
+
+
 .budget-card__stat {
   display: flex;
   flex-direction: column;
@@ -231,6 +243,15 @@
     &--cyan { border-left-color: $cyan; }
     &--yellow { border-left-color: $yellow; }
     &--navy { border-left-color: $navy; }
+    &--red {border-left-color : $red};
+    &--purple {border-left-color : $purple};
+    &--turquoise {border-left-color : $turquoise};
+    &--brown {border-left-color : $brown};
+    &--magneta {border-left-color : $magenta};
+    &--blue {border-left-color : $blue};
+    &--army-green {border-left-color : $army-green};
+    &--gold {border-left-color : $gold};
+    &--orange {border-left-color : $orange};
  
 }
 
@@ -551,7 +572,18 @@
   border: 1px solid #cfcfcf;
   border-radius: 12px;
   padding: 0.9rem 1rem;
+  &--error {
+    border: 1px solid $red;
+    
+  }
 }
+
+.budget-modal__error {
+  @include text-preset-5;
+  color: $red;
+}
+
+
 
 .budget-modal__currency {
   color: #7a7a7a;
@@ -630,11 +662,25 @@
   border-radius: 12px;
   display: flex;
   align-items: center;
+  justify-content: space-between;
   gap: 0.85rem;
   text-align: left;
   &:hover {
     background: #f3f3f3;
   }
+}
+.dropdown__item--disabled {
+color: $grey-600;
+}
+
+.dropdown__tag {
+  @include text-preset-5;
+}
+
+.span-wrapper {
+  display: inline-flex;
+  gap: 0.75rem;
+  align-items: center;
 }
 
 /* dots */

@@ -2,6 +2,15 @@ import "./Budgets.scss";
 import CloseBtn from "../../assets/images/icon-close-modal.svg";
 import Arrow from "../../assets/images/icon-caret-down.svg";
 import { useEffect, useRef, useState } from "react";
+import { useAppDispatch, useAppSelector } from "../../store/hooks";
+import {
+  addBudget,
+  updateBudget,
+} from "../../features/budgetSlice/budgetSlice";
+import {
+  selectUsedCategories,
+  selectUsedThemes,
+} from "../../features/budgetSlice/budgetSelectors";
 
 const categoryOptions = [
   "Entertainment",
@@ -42,19 +51,66 @@ type CategoryOption = (typeof categoryOptions)[number];
 type ColorOption = (typeof colorOptions)[number]["value"];
 type DropdownType = "category" | "color" | null;
 type EditModalProps = {
+  mode: "add" | "edit";
   title: string;
   text: string;
   closeModal: () => void;
+  btnText: string;
+  selectBudget?: number;
 };
 
-export default function EditModal({ closeModal }: EditModalProps) {
+export default function EditModal({
+  closeModal,
+  title,
+  text,
+  btnText,
+  mode,
+  selectBudget,
+}: EditModalProps) {
   const [categoryValue, setCategoryValue] =
     useState<CategoryOption>("Entertainment");
   const [colorValue, setColorValue] = useState<ColorOption>("green");
   const [openDropdown, setOpenDropdown] = useState<DropdownType>(null);
+  const [maximum, setMaximum] = useState<number>(0);
 
   const categoryRef = useRef<HTMLDivElement | null>(null);
   const colorRef = useRef<HTMLDivElement | null>(null);
+
+  const [maxError, setMaxError] = useState<string | null>(null);
+  const maxInputRef = useRef<HTMLInputElement | null>(null);
+
+  const dispatch = useAppDispatch();
+
+  const handleSubmit = () => {
+    if (maximum <= 0) {
+      setMaxError("Please enter a valid amount");
+      maxInputRef.current?.focus();
+      return;
+    }
+    if (mode === "add") {
+      dispatch(
+        addBudget({
+          category: categoryValue,
+          theme: colorValue,
+          maximum,
+        })
+      );
+    }
+    if (mode === "edit" && selectBudget) {
+      dispatch(
+        updateBudget({
+          id: selectBudget,
+          changes: {
+            category: categoryValue,
+            theme: colorValue,
+            maximum,
+          },
+        })
+      );
+    }
+
+    closeModal();
+  };
 
   useEffect(() => {
     const handleClickOutside = (e: MouseEvent) => {
@@ -83,6 +139,10 @@ export default function EditModal({ closeModal }: EditModalProps) {
   }, [openDropdown]);
 
   const selectedColor = colorOptions.find((c) => c.value === colorValue);
+  const usedCategories = useAppSelector(selectUsedCategories);
+  const isUsed = (opt: CategoryOption) => usedCategories.includes(opt);
+  const usedTheme = useAppSelector(selectUsedThemes);
+  const isTheme = (color: ColorOption) => usedTheme.includes(color);
 
   return (
     <>
@@ -92,7 +152,7 @@ export default function EditModal({ closeModal }: EditModalProps) {
       {/* modal */}
       <div className="budget-modal" role="dialog" aria-modal="true">
         <header className="budget-modal__header">
-          <h2 className="budget-modal__title">Add New Budget</h2>
+          <h2 className="budget-modal__title">{title}</h2>
 
           <button
             onClick={closeModal}
@@ -103,10 +163,7 @@ export default function EditModal({ closeModal }: EditModalProps) {
           </button>
         </header>
 
-        <p className="budget-modal__desc">
-          Choose a category to set a spending budget. These categories can help
-          you monitor spending.
-        </p>
+        <p className="budget-modal__desc">{text}</p>
 
         {/* Budget Category */}
         <div className="budget-modal__field">
@@ -126,19 +183,28 @@ export default function EditModal({ closeModal }: EditModalProps) {
 
             {openDropdown === "category" && (
               <div className="dropdown__menu">
-                {categoryOptions.map((opt) => (
-                  <button
-                    key={opt}
-                    type="button"
-                    className="dropdown__item"
-                    onClick={() => {
-                      setCategoryValue(opt);
-                      setOpenDropdown(null);
-                    }}
-                  >
-                    {opt}
-                  </button>
-                ))}
+                {categoryOptions.map((opt) => {
+                  const disable = isUsed(opt);
+                  return (
+                    <button
+                      key={opt}
+                      type="button"
+                      className={`dropdown__item ${
+                        disable ? "dropdown__item--disabled" : ""
+                      }`}
+                      onClick={() => {
+                        if (disable) return;
+                        setCategoryValue(opt);
+                        setOpenDropdown(null);
+                      }}
+                    >
+                      {opt}
+                      {disable && (
+                        <span className="dropdown__tag"> Already used</span>
+                      )}
+                    </button>
+                  );
+                })}
               </div>
             )}
           </div>
@@ -148,14 +214,25 @@ export default function EditModal({ closeModal }: EditModalProps) {
         <div className="budget-modal__field">
           <label className="budget-modal__label">Maximum Spend</label>
 
-          <div className="budget-modal__money-input">
+          <div
+            className={`budget-modal__money-input ${
+              maxError ? "budget-modal__money-input--error" : ""
+            }`}
+          >
             <span className="budget-modal__currency">$</span>
             <input
-              className="budget-modal__input"
+              ref={maxInputRef}
+              className="budget-modal__input "
               type="text"
               placeholder="e.g. 2000"
+              value={maximum || ""}
+              onChange={(e) => {
+                setMaximum(Number(e.target.value));
+                if (maxError) setMaxError(null);
+              }}
             />
           </div>
+          {maxError && <span className="budget-modal__error">{maxError}</span>}
         </div>
 
         {/* Theme */}
@@ -183,30 +260,45 @@ export default function EditModal({ closeModal }: EditModalProps) {
 
             {openDropdown === "color" && (
               <div className="dropdown__menu">
-                {colorOptions.map((opt) => (
-                  <button
-                    key={opt.value}
-                    type="button"
-                    className="dropdown__item"
-                    onClick={() => {
-                      setColorValue(opt.value);
-                      setOpenDropdown(null);
-                    }}
-                  >
-                    <span
-                      className={`color-dot ${opt.className}`}
-                      aria-hidden="true"
-                    />
-                    <span>{opt.label}</span>
-                  </button>
-                ))}
+                {colorOptions.map((opt) => {
+                  const disable = isTheme(opt.value);
+                  return (
+                    <button
+                      key={opt.value}
+                      type="button"
+                      className={`dropdown__item ${
+                        disable ? "dropdown__item--disabled" : ""
+                      }`}
+                      onClick={() => {
+                        setColorValue(opt.value);
+                        setOpenDropdown(null);
+                      }}
+                    >
+                      <div className="span-wrapper">
+                        <span
+                          className={`color-dot ${opt.className}`}
+                          aria-hidden="true"
+                        />
+                        <span>{opt.label}</span>
+                      </div>
+
+                      {disable && (
+                        <span className="dropdown__tag">Already used</span>
+                      )}
+                    </button>
+                  );
+                })}
               </div>
             )}
           </div>
         </div>
 
-        <button type="button" className="budget-modal__submit">
-          Add Budget
+        <button
+          type="button"
+          className="budget-modal__submit"
+          onClick={handleSubmit}
+        >
+          {btnText}
         </button>
       </div>
     </>

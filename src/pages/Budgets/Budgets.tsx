@@ -7,16 +7,29 @@ import EditModal from "./EditModal";
 import { useAppSelector } from "../../store/hooks";
 import { budgetsWithTransactions } from "../../features/budgetSlice/budgetSelectors";
 import { useNavigate } from "react-router-dom";
-// import { FaOpencart } from "react-icons/fa6";
+import { deleteBudget } from "../../features/budgetSlice/budgetSlice";
+import { useAppDispatch } from "../../store/hooks";
 
 type BudgetAction = number | null;
 type ModalType = "delete" | "edit" | "add" | null;
 
 export default function Budgets() {
   const [openMenu, setOpenMenu] = useState<BudgetAction>(null);
+  const [selectedBudgetId, setSelectedBudgetId] = useState<number | null>(null);
   const menuRef = useRef<HTMLDivElement | null>(null);
 
+  const dispatch = useAppDispatch();
   const navigate = useNavigate();
+
+  const confirmDelete = () => {
+    if (selectedBudgetId !== null) {
+      dispatch(deleteBudget(selectedBudgetId));
+    }
+    console.log(selectedBudgetId);
+
+    setSelectedBudgetId(null);
+    setOpenModal(null);
+  };
   /* close dropdown on outside click */
   useEffect(() => {
     const handleClickOutside = (e: MouseEvent) => {
@@ -35,7 +48,8 @@ export default function Budgets() {
     setOpenModal(type);
   };
 
-  const openDeleteModal = () => {
+  const openDeleteModal = (id: number) => {
+    setSelectedBudgetId(id);
     setOpenModal("delete");
   };
 
@@ -47,6 +61,11 @@ export default function Budgets() {
     budgetsWithTransactions
   );
   console.log(items, totalLimit, totalSpent);
+
+  const selectBudget = items.find(
+    (b) => b.budget.id === selectedBudgetId
+  )?.budget;
+  console.log(selectBudget);
 
   const donutGradient = items
     .reduce<{
@@ -159,7 +178,10 @@ export default function Budgets() {
                         <button
                           type="button"
                           className="budget-card__menu-item"
-                          onClick={() => openEditModal("edit")}
+                          onClick={() => {
+                            setSelectedBudgetId(budget.id);
+                            openEditModal("edit");
+                          }}
                         >
                           Edit Budget
                         </button>
@@ -167,7 +189,7 @@ export default function Budgets() {
                         <button
                           type="button"
                           className="budget-card__menu-item budget-card__menu-item--danger"
-                          onClick={openDeleteModal}
+                          onClick={() => openDeleteModal(budget.id)}
                         >
                           Delete Budget
                         </button>
@@ -262,16 +284,23 @@ export default function Budgets() {
         </div>
       </section>
 
-      {openModal === "delete" && <DeleteModal closeModal={closeModal} />}
+      {openModal === "delete" && (
+        <DeleteModal closeModal={closeModal} confirmDelete={confirmDelete} />
+      )}
       {openModal === "add" && (
         <EditModal
-          title="Add New Pot"
+          btnText="Add Budget"
+          mode="add"
+          title="Add New Budget"
           text="Choose a category to set a spending budget.These categories can help you monitor spending"
           closeModal={closeModal}
         />
       )}
-      {openModal === "edit" && (
+      {openModal === "edit" && selectBudget && (
         <EditModal
+          selectBudget={selectBudget.id}
+          btnText="Edit Budget"
+          mode="edit"
           title="Edit Budget"
           text="As your budget change, feel free to update your spending limit"
           closeModal={closeModal}

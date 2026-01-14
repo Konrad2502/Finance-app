@@ -3,9 +3,13 @@ import CloseBtn from "../../assets/images/icon-close-modal.svg";
 
 type DeleteModalProps = {
   closeModal: () => void;
+  confirmDelete: () => void;
 };
 
-export default function DeleteModal({ closeModal }: DeleteModalProps) {
+export default function DeleteModal({
+  closeModal,
+  confirmDelete,
+}: DeleteModalProps) {
   return (
     <div className="delete-modal">
       {/* BACKDROP */}
@@ -29,11 +33,19 @@ export default function DeleteModal({ closeModal }: DeleteModalProps) {
           reversed, and all the data inside it will be removed forever.
         </p>
 
-        <button className="delete-modal__confirm" type="button">
+        <button
+          className="delete-modal__confirm"
+          type="button"
+          onClick={confirmDelete}
+        >
           Yes, Confirm Deletion
         </button>
 
-        <button className="delete-modal__cancel" type="button">
+        <button
+          className="delete-modal__cancel"
+          type="button"
+          onClick={closeModal}
+        >
           No, Go Back
         </button>
       </div>

@@ -5,6 +5,16 @@ import { selectAllTransaction } from "../appData/appDataSelectors";
 export const selectBudgets = (state: RootState) =>
   state.budgets.items;
 
+export const selectUsedCategories = createSelector(
+  [selectBudgets],
+  (budgets) => budgets.map((b) => b.category)
+);
+
+export const selectUsedThemes = createSelector(
+  [selectBudgets],
+  (budgets) => budgets.map((b) => b.theme)
+);
+
 export const budgetsWithTransactions = createSelector(
   [selectBudgets, selectAllTransaction],
   (budgets, transactions) => {
