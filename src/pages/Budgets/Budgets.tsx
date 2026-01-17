@@ -17,6 +17,7 @@ export default function Budgets() {
   const [openMenu, setOpenMenu] = useState<BudgetAction>(null);
   const [selectedBudgetId, setSelectedBudgetId] = useState<number | null>(null);
   const menuRef = useRef<HTMLDivElement | null>(null);
+  const [openModal, setOpenModal] = useState<ModalType>(null);
 
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
@@ -41,8 +42,6 @@ export default function Budgets() {
     document.addEventListener("click", handleClickOutside);
     return () => document.removeEventListener("click", handleClickOutside);
   }, []);
-
-  const [openModal, setOpenModal] = useState<ModalType>(null);
 
   const openEditModal = (type: ModalType) => {
     setOpenModal(type);

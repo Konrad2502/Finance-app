@@ -6,23 +6,24 @@ import { useState, useEffect, useRef } from "react";
 import DeleteModalPots from "./DeleteModalPots";
 import AddPotModal from "./AddPotModal";
 import PotAmountModal from "./PotAmountModal";
-type PotColor = "green" | "navy" | "cyan" | "yellow" | "purple";
-
-type Pot = {
-  id: number;
-  name: string;
-  color: PotColor;
-  saved: number;
-  target: number;
-};
-
-const mockPots: Pot[] = [
-  { id: 1, name: "Savings", color: "green", saved: 159, target: 2000 },
-  { id: 2, name: "Concert Ticket", color: "navy", saved: 110, target: 150 },
-  { id: 3, name: "Gift", color: "cyan", saved: 40, target: 60 },
-  { id: 4, name: "New Laptop", color: "yellow", saved: 10, target: 1000 },
-  { id: 5, name: "Holiday", color: "purple", saved: 531, target: 1440 },
-];
+import { useAppSelector } from "../../store/hooks";
+import { selectPots } from "../../features/potSlice/potSelectors";
+import { useAppDispatch } from "../../store/hooks";
+import { deletePot } from "../../features/potSlice/potSlice";
+// type PotColor =
+//   | "green"
+//   | "navy"
+//   | "cyan"
+//   | "yellow"
+//   | "red"
+//   | "purple"
+//   | "turquoise"
+//   | "brown"
+//   | "magenta"
+//   | "blue"
+//   | "army-green"
+//   | "gold"
+//   | "orange";
 
 const formatMoney = (value: number) =>
   value.toLocaleString("en-US", {
@@ -43,6 +44,23 @@ export default function Pots() {
   const [openMenu, setOpenMenu] = useState<PotAction>(null);
   const menuRef = useRef<HTMLDivElement | null>(null);
   const [openModal, setOpenModal] = useState<ModalType>(null);
+  const [selectPotId, setSelectPotId] = useState<number | null>(null);
+
+  const dispatch = useAppDispatch();
+
+  const confirmDeletePot = () => {
+    if (selectPotId !== null) {
+      dispatch(deletePot(selectPotId));
+    }
+    setSelectPotId(null);
+    setOpenModal(null);
+  };
+
+  const pots = useAppSelector(selectPots);
+  console.log();
+
+  const selectPot = pots.find((p) => p.id === selectPotId);
+  console.log(selectPot);
 
   const closeModalHandle = () => setOpenModal(null);
 
@@ -72,8 +90,8 @@ export default function Pots() {
       </div>
 
       <section className="pots-page__content">
-        {mockPots.map((pot) => {
-          const percent = pot.target > 0 ? (pot.saved / pot.target) * 100 : 0;
+        {pots.map((pot) => {
+          const percent = pot.target > 0 ? (pot.total / pot.target) * 100 : 0;
           const safePercent = Math.max(0, Math.min(100, percent));
 
           return (
@@ -82,7 +100,7 @@ export default function Pots() {
               <header className="pot-card__header">
                 <div className="pot-card__title">
                   <span
-                    className={`pot-card__dot pot-card__dot--${pot.color}`}
+                    className={`pot-card__dot pot-card__dot--${pot.theme}`}
                   />
                   <h3 className="pot-card__name">{pot.name}</h3>
                 </div>
@@ -95,9 +113,10 @@ export default function Pots() {
                   <button
                     type="button"
                     className="pot-card__menu-btn"
-                    onClick={() =>
-                      setOpenMenu((prev) => (prev === pot.id ? null : pot.id))
-                    }
+                    onClick={() => {
+                      setOpenMenu((prev) => (prev === pot.id ? null : pot.id));
+                      setSelectPotId(pot.id);
+                    }}
                   >
                     <img src={DotsIcon} alt="" aria-hidden="true" />
                   </button>
@@ -105,7 +124,9 @@ export default function Pots() {
                   {openMenu === pot.id && (
                     <div className="pot-card__menu-dropdown">
                       <button
-                        onClick={() => setOpenModal("editPot")}
+                        onClick={() => {
+                          setOpenModal("editPot");
+                        }}
                         type="button"
                         className="pot-card__menu-item"
                       >
@@ -129,14 +150,14 @@ export default function Pots() {
                 <div className="pot-card__top">
                   <div className="pot-card__label">Total Saved</div>
                   <div className="pot-card__amount">
-                    ${formatMoney(pot.saved)}
+                    ${formatMoney(pot.total)}
                   </div>
                 </div>
 
                 {/* bar */}
                 <div className="pot-card__bar">
                   <div
-                    className={`pot-card__bar-fill pot-card__bar-fill--${pot.color}`}
+                    className={`pot-card__bar-fill pot-card__bar-fill--${pot.theme}`}
                     style={{ width: `${safePercent}%` }}
                   />
                 </div>
@@ -173,10 +194,14 @@ export default function Pots() {
         })}
       </section>
       {openModal === "deletePot" && (
-        <DeleteModalPots closeModal={closeModalHandle} />
+        <DeleteModalPots
+          confirmDeletePot={confirmDeletePot}
+          closeModal={closeModalHandle}
+        />
       )}
       {openModal === "addPot" && (
         <AddPotModal
+          mode="add"
           charMax={30}
           description=" Create a pot to set savings targets. These can help keep you on track
           as you save for special purchases."
@@ -185,8 +210,10 @@ export default function Pots() {
           closeModal={closeModalHandle}
         />
       )}
-      {openModal === "editPot" && (
+      {openModal === "editPot" && selectPot && (
         <AddPotModal
+          selectPot={selectPot.id}
+          mode="edit"
           charMax={30}
           description="If your savings targets change, feel free to update your pots"
           title="Edit Pot"

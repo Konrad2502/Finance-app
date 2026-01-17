@@ -134,11 +134,20 @@
   height: 100%;
   border-radius: inherit;
 
-  &--green { background-color: $green; }
-  &--navy { background-color: $navy; }
+   &--green { background-color: $green; }
   &--cyan { background-color: $cyan; }
   &--yellow { background-color: $yellow; }
-  &--purple { background-color: $purple; }
+  &--navy { background-color: $navy; }
+  &--red { background: $red; }
+&--purple { background: $purple; }
+&--turquoise { background: $turquoise; }
+&--brown { background: $brown; }
+
+&--magenta { background: $magenta; }
+&--blue { background: $blue; }
+&--army-green { background: $army-green; }
+&--gold { background: $gold; }
+&--orange { background: $orange; }
 }
 
 /* meta */
@@ -401,12 +410,24 @@
   &::placeholder {
     color: $grey-600;
   }
+  &--error {
+border: 1px solid $red;
+  }
 }
 
 .pots-modal__hint {
   @include text-preset-5;
   color: $grey-600;
-  align-self: flex-end;
+  display: flex;
+  justify-content: end;
+&--between {
+  justify-content: space-between;
+}
+}
+
+.pots-modal__error {
+  color: $red;
+  @include text-preset-5;
 }
 
 /* money input */
@@ -417,6 +438,9 @@
   border: 1px solid $beige-500;
   border-radius: 12px;
   padding: 0.9rem 1rem;
+  &--error {
+    border: 1px solid $red;
+  }
 }
 
 .pots-modal__currency {
@@ -452,6 +476,9 @@
 /* dropdown */
 .pots-dropdown {
   position: relative;
+  &-error {
+    border: 1px solid $red;
+  }
 }
 
 .pots-dropdown__btn {
@@ -464,6 +491,9 @@
   display: flex;
   align-items: center;
   justify-content: space-between;
+  &--error {
+    border: 1px solid $red;
+  }
 }
 
 .pots-dropdown__value {
@@ -499,6 +529,7 @@
   border-radius: 12px;
   display: flex;
   align-items: center;
+  justify-content: space-between;
   gap: 0.85rem;
   text-align: left;
 
@@ -506,6 +537,21 @@
     background: $beige-100;
   }
 }
+
+.pots-dropdown__item--disabled {
+color: $grey-600;
+}
+
+.dropdown__tag {
+  @include text-preset-5;
+}
+.wrapper {
+ display: inline-flex;
+  gap: 0.75rem;
+  align-items: center;
+}
+
+
 
 
 .color-dot {

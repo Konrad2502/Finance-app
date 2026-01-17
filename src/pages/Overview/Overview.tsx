@@ -8,6 +8,10 @@ import {
 } from "../../features/appData/appDataSelectors";
 import { useNavigate } from "react-router-dom";
 import { budgetsWithTransactions } from "../../features/budgetSlice/budgetSelectors";
+import {
+  selectPots,
+  selectPotsTotal,
+} from "../../features/potSlice/potSelectors";
 
 export default function Overview() {
   const data = useAppSelector(selectAppData);
@@ -17,6 +21,9 @@ export default function Overview() {
   const { items, totalLimit, totalSpent } = useAppSelector(
     budgetsWithTransactions
   );
+
+  const pots = useAppSelector(selectPots);
+  const totalPots = useAppSelector(selectPotsTotal);
 
   const donutGradient = items
     .reduce<{
@@ -64,7 +71,11 @@ export default function Overview() {
           <div className="pots">
             <div className="pots__heading">
               <h3 className="pots__heading-title">Pots</h3>
-              <button className="pots__heading-btn" type="button">
+              <button
+                onClick={() => navigate("pots")}
+                className="pots__heading-btn"
+                type="button"
+              >
                 <span className="pots__heading-btnText">See details</span>
                 <img
                   className="pots__heading-btnIcon"
@@ -85,31 +96,18 @@ export default function Overview() {
                 />
                 <div className="pots__total-text">
                   <p className="pots__total-label">Total Saved</p>
-                  <p className="pots__total-amount">$850</p>
+                  <p className="pots__total-amount">${totalPots}</p>
                 </div>
               </div>
 
               {/* RIGHT LIST */}
               <ul className="pots__list">
-                <li className="pots__item pots__item--green">
-                  <span className="pots__item-label">Savings</span>
-                  <span className="pots__item-amount">$159</span>
-                </li>
-
-                <li className="pots__item pots__item--navy">
-                  <span className="pots__item-label">Concert Ticket</span>
-                  <span className="pots__item-amount">$110</span>
-                </li>
-
-                <li className="pots__item pots__item--cyan">
-                  <span className="pots__item-label">Gift</span>
-                  <span className="pots__item-amount">$40</span>
-                </li>
-
-                <li className="pots__item pots__item--yellow">
-                  <span className="pots__item-label">New Laptop</span>
-                  <span className="pots__item-amount">$10</span>
-                </li>
+                {pots.map((pot) => (
+                  <li className={`pots__item pots__item--${pot.theme}`}>
+                    <span className="pots__item-label">{pot.name}</span>
+                    <span className="pots__item-amount">${pot.total}</span>
+                  </li>
+                ))}
               </ul>
             </div>
           </div>

@@ -72,6 +72,8 @@ export default function EditModal({
   const [colorValue, setColorValue] = useState<ColorOption>("green");
   const [openDropdown, setOpenDropdown] = useState<DropdownType>(null);
   const [maximum, setMaximum] = useState<number>(0);
+  const [colorError, setColorError] = useState<string | null>(null);
+  const [categoryError, setCategoryError] = useState<string | null>(null);
 
   const categoryRef = useRef<HTMLDivElement | null>(null);
   const colorRef = useRef<HTMLDivElement | null>(null);
@@ -82,9 +84,17 @@ export default function EditModal({
   const dispatch = useAppDispatch();
 
   const handleSubmit = () => {
+    if (isUsed(categoryValue)) {
+      setCategoryError("Category already selected");
+      return;
+    }
     if (maximum <= 0) {
       setMaxError("Please enter a valid amount");
       maxInputRef.current?.focus();
+      return;
+    }
+    if (isTheme(colorValue)) {
+      setColorError("Color already selected");
       return;
     }
     if (mode === "add") {
@@ -172,15 +182,20 @@ export default function EditModal({
           <div ref={categoryRef} className="dropdown">
             <button
               type="button"
-              className="dropdown__btn"
-              onClick={() =>
-                setOpenDropdown((p) => (p === "category" ? null : "category"))
-              }
+              className={`dropdown__btn ${
+                categoryError ? "dropdown__btn--error" : ""
+              }`}
+              onClick={() => {
+                setOpenDropdown((p) => (p === "category" ? null : "category"));
+                setCategoryError(null);
+              }}
             >
               <span className="dropdown__text">{categoryValue}</span>
               <img src={Arrow} alt="" aria-hidden="true" />
             </button>
-
+            {categoryError && (
+              <span className="budget-modal__error">{categoryError}</span>
+            )}
             {openDropdown === "category" && (
               <div className="dropdown__menu">
                 {categoryOptions.map((opt) => {
@@ -242,10 +257,13 @@ export default function EditModal({
           <div ref={colorRef} className="dropdown">
             <button
               type="button"
-              className="dropdown__btn"
-              onClick={() =>
-                setOpenDropdown((p) => (p === "color" ? null : "color"))
-              }
+              className={`dropdown__btn ${
+                colorError ? "dropdown__btn--error" : ""
+              }`}
+              onClick={() => {
+                setOpenDropdown((p) => (p === "color" ? null : "color"));
+                setColorError(null);
+              }}
             >
               <span className="dropdown__value">
                 <span
@@ -257,6 +275,9 @@ export default function EditModal({
 
               <img src={Arrow} alt="" aria-hidden="true" />
             </button>
+            {colorError && (
+              <span className="budget-modal__error">{colorError}</span>
+            )}
 
             {openDropdown === "color" && (
               <div className="dropdown__menu">
@@ -270,6 +291,7 @@ export default function EditModal({
                         disable ? "dropdown__item--disabled" : ""
                       }`}
                       onClick={() => {
+                        if (disable) return;
                         setColorValue(opt.value);
                         setOpenDropdown(null);
                       }}

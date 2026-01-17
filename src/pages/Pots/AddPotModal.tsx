@@ -2,6 +2,10 @@ import "./Pots.scss";
 import CloseBtn from "../../assets/images/icon-close-modal.svg";
 import Arrow from "../../assets/images/icon-caret-down.svg";
 import { useEffect, useRef, useState } from "react";
+import { useAppDispatch } from "../../store/hooks";
+import { addPot, updatePot } from "../../features/potSlice/potSlice";
+import { selectUsedThemesPot } from "../../features/potSlice/potSelectors";
+import { useAppSelector } from "../../store/hooks";
 
 const colorOptions = [
   { value: "green", label: "Green", className: "color-dot--green" },
@@ -31,7 +35,9 @@ type AddPotModalProps = {
   charMax: number;
   description: string;
   btnText: string;
+  mode: "add" | "edit";
   closeModal: () => void;
+  selectPot?: number;
 };
 
 export default function AddPotModal({
@@ -40,6 +46,8 @@ export default function AddPotModal({
   description,
   btnText,
   closeModal,
+  mode,
+  selectPot,
 }: AddPotModalProps) {
   const [potName, setPotName] = useState("");
   const [target, setTarget] = useState("");
@@ -48,10 +56,69 @@ export default function AddPotModal({
   const MAX_NAME = charMax;
 
   const colorRef = useRef<HTMLDivElement | null>(null);
-
+  const dispatch = useAppDispatch();
   const selectedColor = colorOptions.find((c) => c.value === color);
 
+  const usedThemePot = useAppSelector(selectUsedThemesPot);
+  const isTheme = (color: ColorOption) => usedThemePot.includes(color);
+
   const charsLeft = MAX_NAME - potName.length;
+
+  const [nameError, setNameError] = useState<string | null>(null);
+  const [targetError, setTargetError] = useState<string | null>(null);
+  const [colorError, setColorError] = useState<string | null>(null);
+
+  const nameInputRef = useRef<HTMLInputElement | null>(null);
+  const targetInputRef = useRef<HTMLInputElement | null>(null);
+
+  const handleSubmit = () => {
+    const trimmedName = potName.trim();
+    const targetNumber = Number(target);
+
+    setNameError(null);
+    setTargetError(null);
+
+    if (!trimmedName) {
+      setNameError("Pot name is required");
+      nameInputRef.current?.focus();
+      return;
+    }
+
+    if (!Number.isFinite(targetNumber) || targetNumber <= 0) {
+      setTargetError("Please enter a valid amount");
+      targetInputRef.current?.focus();
+      return;
+    }
+
+    if (isTheme(color)) {
+      setColorError("Color already selected");
+      return;
+    }
+
+    if (mode === "add") {
+      dispatch(
+        addPot({
+          name: potName.trim(),
+          target: targetNumber,
+          theme: color,
+        })
+      );
+    }
+
+    if (mode === "edit" && selectPot) {
+      dispatch(
+        updatePot({
+          id: selectPot,
+          name: potName.trim(),
+          target: targetNumber,
+          theme: color,
+        })
+      );
+    }
+
+    closeModal();
+  };
+  console.log(addPot);
 
   useEffect(() => {
     const handleClickOutside = (e: MouseEvent) => {
@@ -97,16 +164,30 @@ export default function AddPotModal({
           </label>
 
           <input
-            id="pot-name"
-            className="pots-modal__input"
+            ref={nameInputRef}
+            className={`pots-modal__input ${
+              nameError ? "pots-modal__input--error" : ""
+            }`}
             type="text"
             placeholder="e.g. Rainy Days"
             value={potName}
             maxLength={MAX_NAME}
-            onChange={(e) => setPotName(e.target.value)}
+            onChange={(e) => {
+              setPotName(e.target.value);
+              if (nameError) setNameError(null);
+            }}
           />
 
-          <div className="pots-modal__hint">{charsLeft} characters left</div>
+          <div
+            className={`pots-modal__hint ${
+              nameError ? "pots-modal__hint--between" : ""
+            }`}
+          >
+            {nameError && (
+              <span className="pots-modal__error">{nameError}</span>
+            )}
+            <span> {charsLeft} characters left</span>
+          </div>
         </div>
 
         {/* Target */}
@@ -115,17 +196,27 @@ export default function AddPotModal({
             Target
           </label>
 
-          <div className="pots-modal__money-input">
+          <div
+            className={`pots-modal__money-input ${
+              targetError ? "pots-modal__money-input--error" : ""
+            }`}
+          >
             <span className="pots-modal__currency">$</span>
             <input
-              id="pot-target"
+              ref={targetInputRef}
               className="pots-modal__money"
               type="text"
               placeholder="e.g. 2000"
               value={target}
-              onChange={(e) => setTarget(e.target.value)}
+              onChange={(e) => {
+                setTarget(e.target.value);
+                if (targetError) setTargetError(null);
+              }}
             />
           </div>
+          {targetError && (
+            <span className="pots-modal__error">{targetError}</span>
+          )}
         </div>
 
         {/* Theme */}
@@ -135,7 +226,9 @@ export default function AddPotModal({
           <div ref={colorRef} className="pots-dropdown">
             <button
               type="button"
-              className="pots-dropdown__btn"
+              className={`pots-dropdown__btn ${
+                colorError ? "pots-dropdown__btn--error" : ""
+              }`}
               onClick={() =>
                 setOpenColor((p) => (p === "active" ? null : "active"))
               }
@@ -155,29 +248,49 @@ export default function AddPotModal({
 
             {openColor === "active" && (
               <div className="pots-dropdown__menu">
-                {colorOptions.map((opt) => (
-                  <button
-                    key={opt.value}
-                    type="button"
-                    className="pots-dropdown__item"
-                    onClick={() => {
-                      setColor(opt.value);
-                      setOpenColor(null);
-                    }}
-                  >
-                    <span
-                      className={`color-dot ${opt.className}`}
-                      aria-hidden="true"
-                    />
-                    <span>{opt.label}</span>
-                  </button>
-                ))}
+                {colorOptions.map((opt) => {
+                  const disable = isTheme(opt.value);
+                  return (
+                    <button
+                      key={opt.value}
+                      type="button"
+                      className={`pots-dropdown__item ${
+                        disable ? "pots-dropdown__item--disabled" : ""
+                      }`}
+                      onClick={() => {
+                        if (disable) return;
+                        setColor(opt.value);
+                        setOpenColor(null);
+                        if (colorError) setColorError(null);
+                      }}
+                    >
+                      <div className="wrapper">
+                        <span
+                          className={`color-dot ${opt.className}`}
+                          aria-hidden="true"
+                        />
+                        <span>{opt.label}</span>
+                      </div>
+
+                      {disable && (
+                        <span className="dropdown__tag">Already used</span>
+                      )}
+                    </button>
+                  );
+                })}
               </div>
             )}
           </div>
+          {colorError && (
+            <span className="pots-modal__error">{colorError}</span>
+          )}
         </div>
 
-        <button type="button" className="pots-modal__submit">
+        <button
+          type="button"
+          className="pots-modal__submit"
+          onClick={handleSubmit}
+        >
           {btnText}
         </button>
       </div>
