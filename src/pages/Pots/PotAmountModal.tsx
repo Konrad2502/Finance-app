@@ -1,6 +1,8 @@
 import "./Pots.scss";
 import CloseBtn from "../../assets/images/icon-close-modal.svg";
-import { useState } from "react";
+import { useRef, useState } from "react";
+import { useAppDispatch } from "../../store/hooks";
+import { addMoney, withdrawMoney } from "../../features/potSlice/potSlice";
 
 type PotAmountModalProps = {
   title: string;
@@ -12,6 +14,7 @@ type PotAmountModalProps = {
   target: number;
   variant: "add" | "withdraw";
   closeModal: () => void;
+  selectPot?: number;
 };
 
 export default function PotAmountModal({
@@ -24,10 +27,42 @@ export default function PotAmountModal({
   target,
   variant,
   closeModal,
+  selectPot,
 }: PotAmountModalProps) {
   const [amount, setAmount] = useState("");
+  const [amountError, setAmountError] = useState<string | null>(null);
+  const amountInputRef = useRef<HTMLInputElement | null>(null);
 
-  const safePercent = Math.max(0, Math.min(100, percent));
+  const dispatch = useAppDispatch();
+
+  const handleSubmit = () => {
+    const numberAmount = Number(amount);
+    if (!Number.isFinite(numberAmount) || numberAmount <= 0) {
+      setAmountError("Please enter a valid amount");
+      amountInputRef.current?.focus();
+      return;
+    }
+
+    if (variant === "add" && selectPot) {
+      dispatch(
+        addMoney({
+          id: selectPot,
+          amount: numberAmount,
+        })
+      );
+    }
+    if (variant === "withdraw" && selectPot) {
+      dispatch(
+        withdrawMoney({
+          id: selectPot,
+          amount: numberAmount,
+        })
+      );
+    }
+
+    setAmountError(null);
+    closeModal();
+  };
 
   return (
     <>
@@ -63,7 +98,7 @@ export default function PotAmountModal({
           <div className="pot-amount-modal__bar">
             <div
               className={`pot-amount-modal__bar-fill pot-amount-modal__bar-fill--${variant}`}
-              style={{ width: `${safePercent}%` }}
+              style={{ width: `${percent}%` }}
             />
           </div>
 
@@ -71,7 +106,7 @@ export default function PotAmountModal({
             <span
               className={`pot-amount-modal__percent pot-amount-modal__percent--${variant}`}
             >
-              {safePercent.toFixed(2)}%
+              {percent.toFixed(2)}%
             </span>
             <span className="pot-amount-modal__target">
               Target of ${target.toLocaleString("en-US")}
@@ -83,20 +118,32 @@ export default function PotAmountModal({
         <div className="pot-amount-modal__field">
           <label className="pot-amount-modal__field-label">{amountLabel}</label>
 
-          <div className="pot-amount-modal__money-input">
+          <div
+            className={`pot-amount-modal__money-input ${
+              amountError ? "pot-amount-modal__money-input--error" : ""
+            }`}
+          >
             <span className="pot-amount-modal__currency">$</span>
             <input
+              ref={amountInputRef}
               type="number"
               className="pot-amount-modal__input"
               value={amount}
               onChange={(e) => setAmount(e.target.value)}
-              placeholder="0"
+              placeholder="e.g. 50"
             />
           </div>
+          {amountError && (
+            <span className="pots-modal__error">{amountError}</span>
+          )}
         </div>
 
         {/* SUBMIT */}
-        <button type="button" className="pot-amount-modal__submit">
+        <button
+          type="button"
+          className="pot-amount-modal__submit"
+          onClick={handleSubmit}
+        >
           {buttonText}
         </button>
       </div>

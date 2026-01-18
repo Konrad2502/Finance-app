@@ -712,6 +712,9 @@ color: $grey-600;
   border: 1px solid $grey-300;
   border-radius: 12px;
   padding: 0.9rem 1rem;
+  &--error {
+    border: 1px solid $red;
+  }
 }
 
 .pot-amount-modal__currency {

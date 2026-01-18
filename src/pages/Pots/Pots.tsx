@@ -62,6 +62,13 @@ export default function Pots() {
   const selectPot = pots.find((p) => p.id === selectPotId);
   console.log(selectPot);
 
+  const percent =
+    selectPot && selectPot.target > 0
+      ? (selectPot.total / selectPot.target) * 100
+      : 0;
+
+  const safePercent = Math.max(0, Math.min(100, percent));
+
   const closeModalHandle = () => setOpenModal(null);
 
   useEffect(() => {
@@ -93,6 +100,7 @@ export default function Pots() {
         {pots.map((pot) => {
           const percent = pot.target > 0 ? (pot.total / pot.target) * 100 : 0;
           const safePercent = Math.max(0, Math.min(100, percent));
+          console.log(safePercent);
 
           return (
             <article key={pot.id} className="pot-card">
@@ -177,14 +185,20 @@ export default function Pots() {
                 <button
                   type="button"
                   className="pot-card__action"
-                  onClick={() => setOpenModal("addMoney")}
+                  onClick={() => {
+                    setSelectPotId(pot.id);
+                    setOpenModal("addMoney");
+                  }}
                 >
                   + Add Money
                 </button>
                 <button
                   type="button"
                   className="pot-card__action"
-                  onClick={() => setOpenModal("withdrawMoney")}
+                  onClick={() => {
+                    setSelectPotId(pot.id);
+                    setOpenModal("withdrawMoney");
+                  }}
                 >
                   Withdraw
                 </button>
@@ -221,31 +235,33 @@ export default function Pots() {
           closeModal={closeModalHandle}
         />
       )}
-      {openModal === "addMoney" && (
+      {openModal === "addMoney" && selectPot && (
         <PotAmountModal
           title="Add to Savings"
           description="Add money to your pot to keep it separate from your main balance. As soon as you add this money, it will be deducted from your current balance.
 "
           amountLabel="Amount to Add"
           buttonText="Confirm Addition"
-          percent={27.95}
-          currentAmount={559}
-          target={2000}
+          percent={safePercent}
+          currentAmount={selectPot.total}
+          target={selectPot.target}
           variant="add"
           closeModal={closeModalHandle}
+          selectPot={selectPot.id}
         />
       )}
-      {openModal === "withdrawMoney" && (
+      {openModal === "withdrawMoney" && selectPot && (
         <PotAmountModal
           title="Withdraw from Savings"
           description=" Withdraw from your pot to put money back in your main balance. This will reduce the amount you have in this pot."
           amountLabel="Amount to Withdraw"
           buttonText="Confirm Withdrawal"
-          percent={24}
-          currentAmount={334}
-          target={2000}
+          percent={safePercent}
+          currentAmount={selectPot.total}
+          target={selectPot.target}
           variant="withdraw"
           closeModal={closeModalHandle}
+          selectPot={selectPot.id}
         />
       )}
     </main>
