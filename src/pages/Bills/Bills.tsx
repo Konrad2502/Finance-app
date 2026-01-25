@@ -4,8 +4,13 @@ import BillPaid from "../../assets/images/icon-bill-paid.svg";
 import BillDue from "../../assets/images/icon-bill-due.svg";
 import BillsIcon from "../../assets/images/icon-recurring-bills.svg";
 import Arrow from "../../assets/images/icon-caret-down.svg";
-import Avatar from "../../assets/images/avatars/ecofuel-energy.jpg";
 import { CiSearch } from "react-icons/ci";
+import { useAppSelector } from "../../store/hooks";
+import {
+  selectRecurringBills,
+  selectBillsSummary,
+} from "../../features/appData/appDataSelectors";
+import { useMemo } from "react";
 
 const sortOptions = [
   "Latest",
@@ -19,70 +24,50 @@ const sortOptions = [
 type SortType = (typeof sortOptions)[number];
 type DropdownType = "active" | null;
 
-const mockBills = [
-  {
-    id: 1,
-    name: "Spark Electric Solutions",
-    due: "Monthly - 2nd",
-    amount: "$100.00",
-    status: "paid",
-  },
-  {
-    id: 2,
-    name: "Serenity Spa & Wellness",
-    due: "Monthly - 3rd",
-    amount: "$30.00",
-    status: "paid",
-  },
-  {
-    id: 3,
-    name: "Elevate Education",
-    due: "Monthly - 4th",
-    amount: "$50.00",
-    status: "paid",
-  },
-  {
-    id: 4,
-    name: "Pixel Playground",
-    due: "Monthly - 11th",
-    amount: "$10.00",
-    status: "paid",
-  },
-  {
-    id: 5,
-    name: "Nimbus Data Storage",
-    due: "Monthly - 21st",
-    amount: "$9.99",
-    status: "due",
-  },
-  {
-    id: 6,
-    name: "ByteWise",
-    due: "Monthly - 23rd",
-    amount: "$49.99",
-    status: "due",
-  },
-  {
-    id: 7,
-    name: "EcoFuel Energy",
-    due: "Monthly - 29th",
-    amount: "$35.00",
-    status: "normal",
-  },
-  {
-    id: 8,
-    name: "Aqua Flow Utilities",
-    due: "Monthly - 30th",
-    amount: "$100.00",
-    status: "normal",
-  },
-];
-
 export default function Bills() {
   const [sortValue, setSortValue] = useState<SortType>("Latest");
   const [openDropdown, setOpenDropdown] = useState<DropdownType>(null);
+  const [searchValue, setSearchValue] = useState("");
 
   const dropdownRef = useRef<HTMLDivElement | null>(null);
+
+  const bills = useAppSelector(selectRecurringBills);
+  const summary = useAppSelector(selectBillsSummary);
+  console.log(bills, summary);
+  const {
+    total,
+    paidTotal,
+    paidCount,
+    upcomingCount,
+    upcomingTotal,
+    dueCount,
+    dueTotal,
+  } = summary;
+
+  const billsBySearch = bills.filter((item) =>
+    item.name.toLowerCase().includes(searchValue.toLowerCase())
+  );
+
+  const sortedBills = useMemo(() => {
+    return [...billsBySearch].sort((a, b) => {
+      switch (sortValue) {
+        case "Latest":
+          return +new Date(b.date) - +new Date(a.date);
+        case "Oldest":
+          return +new Date(a.date) - +new Date(b.date);
+        case "A to Z":
+          return a.name.localeCompare(b.name);
+        case "Z to A":
+          return b.name.localeCompare(a.name);
+        case "Highest":
+          return b.amount - a.amount;
+        case "Lowest":
+          return a.amount - b.amount;
+        default:
+          return 0;
+      }
+    });
+  }, [billsBySearch, sortValue]);
 
   useEffect(() => {
     const handleClickOutside = (e: MouseEvent) => {
@@ -113,7 +98,7 @@ export default function Bills() {
           <div className="bills-summary">
             <img src={BillsIcon} alt="" aria-hidden="true" />
             <span>Total Bills</span>
-            <strong>$384.98</strong>
+            <strong>${total}</strong>
           </div>
 
           <div className="bills-summary-card">
@@ -121,17 +106,23 @@ export default function Bills() {
 
             <div className="bills-summary-row">
               <span>Paid Bills</span>
-              <strong>4 ($190.00)</strong>
+              <strong>
+                {paidCount} (${paidTotal.toFixed(2)})
+              </strong>
             </div>
 
             <div className="bills-summary-row">
               <span>Total Upcoming</span>
-              <strong>4 ($194.98)</strong>
+              <strong>
+                {upcomingCount}(${upcomingTotal.toFixed(2)})
+              </strong>
             </div>
 
             <div className="bills-summary-row bills-summary-row--danger">
               <span>Due Soon</span>
-              <strong>2 ($59.98)</strong>
+              <strong>
+                {dueCount} (${dueTotal.toFixed(2)})
+              </strong>
             </div>
           </div>
         </aside>
@@ -145,6 +136,8 @@ export default function Bills() {
                 type="text"
                 placeholder="Search bills"
                 className="bills-page__search-input"
+                value={searchValue}
+                onChange={(e) => setSearchValue(e.target.value)}
               />
               <CiSearch className="bills-page__search-icon" />
             </div>
@@ -195,15 +188,15 @@ export default function Bills() {
 
           {/* LIST */}
           <ul className="bills-page__list">
-            {mockBills.map((bill) => (
+            {sortedBills.map((bill) => (
               <li key={bill.id} className="bills-page__row">
                 <div className="bills-page__bill">
-                  <img src={Avatar} alt="" />
+                  <img src={bill.avatar} alt="" />
                   <span>{bill.name}</span>
                 </div>
 
                 <div className="bills-page__due">
-                  <span>{bill.due}</span>
+                  <span>{bill.dueText}</span>
                   {bill.status === "paid" && <img src={BillPaid} alt="" />}
                   {bill.status === "due" && <img src={BillDue} alt="" />}
                 </div>
@@ -213,7 +206,7 @@ export default function Bills() {
                     bill.status === "due" ? "bills-page__amount--danger" : ""
                   }`}
                 >
-                  {bill.amount}
+                  {bill.amountFormatted}
                 </strong>
               </li>
             ))}

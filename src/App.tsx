@@ -7,14 +7,17 @@ import Transactions from "./pages/Transactions/Transactions";
 import Budgets from "./pages/Budgets/Budgets";
 import Pots from "./pages/Pots/Pots";
 import Bills from "./pages/Bills/Bills";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { useAppDispatch, useAppSelector } from "./store/hooks";
 import { fetchAppData } from "./features/appData/appDataSlice";
 import { selectAppDataStatus } from "./features/appData/appDataSelectors";
+import LoginModal from "./pages/LoginModal/LoginModal";
 
 function App() {
   const dispatch = useAppDispatch();
   const status = useAppSelector(selectAppDataStatus);
+
+  const [isAuthenticated, setIsAuthenticated] = useState(false);
 
   useEffect(() => {
     if (status === "idle") {
@@ -22,17 +25,24 @@ function App() {
     }
   }, [status, dispatch]);
   return (
-    <Container>
-      <Routes>
-        <Route path="/" element={<Home />}>
-          <Route index element={<Overview />} />
-          <Route path="transactions" element={<Transactions />} />
-          <Route path="budgets" element={<Budgets />} />
-          <Route path="pots" element={<Pots />} />
-          <Route path="bills" element={<Bills />} />
-        </Route>
-      </Routes>
-    </Container>
+    <>
+      {!isAuthenticated && (
+        <LoginModal onSuccess={() => setIsAuthenticated(true)} />
+      )}
+      {isAuthenticated && (
+        <Container>
+          <Routes>
+            <Route path="/" element={<Home />}>
+              <Route index element={<Overview />} />
+              <Route path="transactions" element={<Transactions />} />
+              <Route path="budgets" element={<Budgets />} />
+              <Route path="pots" element={<Pots />} />
+              <Route path="bills" element={<Bills />} />
+            </Route>
+          </Routes>
+        </Container>
+      )}
+    </>
   );
 }
 

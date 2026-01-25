@@ -3,7 +3,7 @@ import NextArrow from "../../assets/images/icon-caret-right.svg";
 import PotIcon from "../../assets/images/icon-pot.svg";
 import { useAppSelector } from "../../store/hooks";
 import {
-  selectAppData,
+  selectBalanceOverview,
   selectRecentTransactions,
 } from "../../features/appData/appDataSelectors";
 import { useNavigate } from "react-router-dom";
@@ -12,11 +12,9 @@ import {
   selectPots,
   selectPotsTotal,
 } from "../../features/potSlice/potSelectors";
+import { selectBillsSummary } from "../../features/appData/appDataSelectors";
 
 export default function Overview() {
-  const data = useAppSelector(selectAppData);
-  const balance = data?.balance;
-
   const recentTransactions = useAppSelector(selectRecentTransactions);
   const { items, totalLimit, totalSpent } = useAppSelector(
     budgetsWithTransactions
@@ -24,6 +22,13 @@ export default function Overview() {
 
   const pots = useAppSelector(selectPots);
   const totalPots = useAppSelector(selectPotsTotal);
+
+  const summary = useAppSelector(selectBillsSummary);
+  const { dueTotal, upcomingTotal, paidTotal } = summary;
+
+  const { income, expenses, currentBalance } = useAppSelector(
+    selectBalanceOverview
+  );
 
   const donutGradient = items
     .reduce<{
@@ -54,15 +59,15 @@ export default function Overview() {
       <div className="overview__summary">
         <div className="overview__item overview__item--active">
           <p className="overview__item-label">Current Balance</p>
-          <p className="overview__item-amount">{`$${balance?.current}`}</p>
+          <p className="overview__item-amount">{`$${currentBalance}`}</p>
         </div>
         <div className="overview__item">
           <p className="overview__item-label">Income</p>
-          <p className="overview__item-amount">{`$${balance?.income}`}</p>
+          <p className="overview__item-amount">{`$${income}`}</p>
         </div>
         <div className="overview__item">
           <p className="overview__item-label">Expenses</p>
-          <p className="overview__item-amount">{`$${balance?.expenses}`}</p>
+          <p className="overview__item-amount">{`$${expenses}`}</p>
         </div>
       </div>
       <div className="overview__main">
@@ -103,7 +108,10 @@ export default function Overview() {
               {/* RIGHT LIST */}
               <ul className="pots__list">
                 {pots.map((pot) => (
-                  <li className={`pots__item pots__item--${pot.theme}`}>
+                  <li
+                    key={pot.id}
+                    className={`pots__item pots__item--${pot.theme}`}
+                  >
                     <span className="pots__item-label">{pot.name}</span>
                     <span className="pots__item-amount">${pot.total}</span>
                   </li>
@@ -136,7 +144,12 @@ export default function Overview() {
               <ul className="transactions__list">
                 {recentTransactions.map((item) => {
                   const formattedDate = new Date(item.date).toLocaleDateString(
-                    "en-GB"
+                    "en-GB",
+                    {
+                      day: "2-digit",
+                      month: "short",
+                      year: "numeric",
+                    }
                   );
                   return (
                     <li key={item.id} className="transactions__item">
@@ -149,7 +162,13 @@ export default function Overview() {
                         <p className="transactions__name">{item.name}</p>
                       </div>
                       <div className="transactions__item-right">
-                        <p className="transactions__amount transactions__amount--positive">
+                        <p
+                          className={`transactions__amount ${
+                            item.amount > 0
+                              ? "transactions__amount--positive"
+                              : ""
+                          }`}
+                        >
                           {(item.amount > 0 ? "+" : "-") +
                             "$" +
                             Math.abs(item.amount).toFixed(2)}
@@ -159,7 +178,6 @@ export default function Overview() {
                     </li>
                   );
                 })}
-                ;
               </ul>
             </div>
           </div>
@@ -230,7 +248,11 @@ export default function Overview() {
           <div className="bills">
             <div className="bills__heading">
               <h3 className="bills__heading-title">Recurring Bills</h3>
-              <button className="bills__heading-btn" type="button">
+              <button
+                onClick={() => navigate("bills")}
+                className="bills__heading-btn"
+                type="button"
+              >
                 <span className="bills__heading-btnText">See details</span>
                 <img
                   className="bills__heading-btnIcon"
@@ -244,17 +266,23 @@ export default function Overview() {
               <ul className="bills__list">
                 <li className="bills__item bills__item--green">
                   <span className="bills__item-label">Paid Bills</span>
-                  <span className="bills__item-amount">$190.00</span>
+                  <span className="bills__item-amount">
+                    ${paidTotal.toFixed(2)}
+                  </span>
                 </li>
 
                 <li className="bills__item bills__item--yellow">
                   <span className="bills__item-label">Total Upcoming</span>
-                  <span className="bills__item-amount">$194.98</span>
+                  <span className="bills__item-amount">
+                    ${upcomingTotal.toFixed(2)}
+                  </span>
                 </li>
 
                 <li className="bills__item bills__item--cyan">
                   <span className="bills__item-label">Due Soon</span>
-                  <span className="bills__item-amount">$59.98</span>
+                  <span className="bills__item-amount">
+                    ${dueTotal.toFixed(2)}
+                  </span>
                 </li>
               </ul>
             </div>

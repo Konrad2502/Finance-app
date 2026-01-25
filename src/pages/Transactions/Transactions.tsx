@@ -230,7 +230,12 @@ export default function Transactions() {
             const sign = isPositive ? "+" : "-";
             const formatted = Math.abs(item.amount).toFixed(2);
             const formattedDate = new Date(item.date).toLocaleDateString(
-              "en-GB"
+              "en-GB",
+              {
+                day: "2-digit",
+                month: "short",
+                year: "numeric",
+              }
             );
 
             return (
