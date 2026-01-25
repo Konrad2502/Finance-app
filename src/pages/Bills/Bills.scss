@@ -226,13 +226,13 @@ transform: rotate(180deg);
   display: flex;
   flex-direction: column;
   height: 100%;
+  gap: 25px;
 }
 
 .bills-page__row {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  flex: 1;
   padding: 18px 0;
   border-top: 1px solid $beige-100;
 }
