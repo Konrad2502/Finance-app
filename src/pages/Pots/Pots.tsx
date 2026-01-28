@@ -1,8 +1,6 @@
 // Pots.tsx
 import "./Pots.scss";
-import DotsIcon from "../../assets/images/icon-ellipsis.svg";
 import { useState, useEffect, useRef } from "react";
-
 import DeleteModalPots from "./DeleteModalPots";
 import AddPotModal from "./AddPotModal";
 import PotAmountModal from "./PotAmountModal";
@@ -10,26 +8,7 @@ import { useAppSelector } from "../../store/hooks";
 import { selectPots } from "../../features/potSlice/potSelectors";
 import { useAppDispatch } from "../../store/hooks";
 import { deletePot } from "../../features/potSlice/potSlice";
-// type PotColor =
-//   | "green"
-//   | "navy"
-//   | "cyan"
-//   | "yellow"
-//   | "red"
-//   | "purple"
-//   | "turquoise"
-//   | "brown"
-//   | "magenta"
-//   | "blue"
-//   | "army-green"
-//   | "gold"
-//   | "orange";
-
-const formatMoney = (value: number) =>
-  value.toLocaleString("en-US", {
-    minimumFractionDigits: 2,
-    maximumFractionDigits: 2,
-  });
+import PotCard from "./PotCard";
 
 type ModalType =
   | "addPot"
@@ -57,10 +36,8 @@ export default function Pots() {
   };
 
   const pots = useAppSelector(selectPots);
-  console.log();
 
   const selectPot = pots.find((p) => p.id === selectPotId);
-  console.log(selectPot);
 
   const percent =
     selectPot && selectPot.target > 0
@@ -97,115 +74,27 @@ export default function Pots() {
       </div>
 
       <section className="pots-page__content">
-        {pots.map((pot) => {
-          const percent = pot.target > 0 ? (pot.total / pot.target) * 100 : 0;
-          const safePercent = Math.max(0, Math.min(100, percent));
-          console.log(safePercent);
-
-          return (
-            <article key={pot.id} className="pot-card">
-              {/* header */}
-              <header className="pot-card__header">
-                <div className="pot-card__title">
-                  <span
-                    className={`pot-card__dot pot-card__dot--${pot.theme}`}
-                  />
-                  <h3 className="pot-card__name">{pot.name}</h3>
-                </div>
-
-                <div
-                  className="pot-card__menu"
-                  ref={menuRef}
-                  onClick={(e) => e.stopPropagation()}
-                >
-                  <button
-                    type="button"
-                    className="pot-card__menu-btn"
-                    onClick={() => {
-                      setOpenMenu((prev) => (prev === pot.id ? null : pot.id));
-                      setSelectPotId(pot.id);
-                    }}
-                  >
-                    <img src={DotsIcon} alt="" aria-hidden="true" />
-                  </button>
-
-                  {openMenu === pot.id && (
-                    <div className="pot-card__menu-dropdown">
-                      <button
-                        onClick={() => {
-                          setOpenModal("editPot");
-                        }}
-                        type="button"
-                        className="pot-card__menu-item"
-                      >
-                        Edit Pot
-                      </button>
-
-                      <button
-                        type="button"
-                        className="pot-card__menu-item pot-card__menu-item--danger"
-                        onClick={() => setOpenModal("deletePot")}
-                      >
-                        Delete Pot
-                      </button>
-                    </div>
-                  )}
-                </div>
-              </header>
-
-              {/* totals */}
-              <div className="pots-card__wrapper">
-                <div className="pot-card__top">
-                  <div className="pot-card__label">Total Saved</div>
-                  <div className="pot-card__amount">
-                    ${formatMoney(pot.total)}
-                  </div>
-                </div>
-
-                {/* bar */}
-                <div className="pot-card__bar">
-                  <div
-                    className={`pot-card__bar-fill pot-card__bar-fill--${pot.theme}`}
-                    style={{ width: `${safePercent}%` }}
-                  />
-                </div>
-
-                {/* bottom numbers */}
-                <div className="pot-card__meta">
-                  <span className="pot-card__percent">
-                    {safePercent.toFixed(1)}%
-                  </span>
-                  <span className="pot-card__target">
-                    Target of ${pot.target.toLocaleString("en-US")}
-                  </span>
-                </div>
-              </div>
-              {/* actions */}
-              <div className="pot-card__actions">
-                <button
-                  type="button"
-                  className="pot-card__action"
-                  onClick={() => {
-                    setSelectPotId(pot.id);
-                    setOpenModal("addMoney");
-                  }}
-                >
-                  + Add Money
-                </button>
-                <button
-                  type="button"
-                  className="pot-card__action"
-                  onClick={() => {
-                    setSelectPotId(pot.id);
-                    setOpenModal("withdrawMoney");
-                  }}
-                >
-                  Withdraw
-                </button>
-              </div>
-            </article>
-          );
-        })}
+        {pots.map((pot) => (
+          <PotCard
+            key={pot.id}
+            pot={pot}
+            isMenuOpen={openMenu === pot.id}
+            onToggleMenu={() => {
+              setOpenMenu((p) => (p === pot.id ? null : pot.id));
+              setSelectPotId(pot.id);
+            }}
+            onEdit={() => setOpenModal("editPot")}
+            onDelete={() => setOpenModal("deletePot")}
+            onAddMoney={() => {
+              setSelectPotId(pot.id);
+              setOpenModal("addMoney");
+            }}
+            onWithdraw={() => {
+              setSelectPotId(pot.id);
+              setOpenModal("withdrawMoney");
+            }}
+          />
+        ))}
       </section>
       {openModal === "deletePot" && (
         <DeleteModalPots
