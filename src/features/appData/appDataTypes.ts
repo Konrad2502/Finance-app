@@ -9,6 +9,7 @@ export type Balance = {
 
 
 export type TransactionCategory =
+  | "All Transactions"
   | "General"
   | "Dining Out"
   | "Groceries"

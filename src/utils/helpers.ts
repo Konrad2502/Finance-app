@@ -1,4 +1,5 @@
 export const categoryOptions = [
+  "All Transactions",
   "Entertainment",
   "Bills",
   "Groceries",
@@ -27,5 +28,15 @@ export const colorOptions = [
   { value: "orange", label: "Orange", className: "color-dot--orange" },
 ] as const;
 
+export const sortOptions = [
+  "Latest",
+  "Oldest",
+  "A to Z",
+  "Z to A",
+  "Highest",
+  "Lowest",
+] as const;
+
 export type CategoryOption = (typeof categoryOptions)[number];
 export type ColorOption = (typeof colorOptions)[number]["value"];
+export type SortOption = (typeof sortOptions)[number];
