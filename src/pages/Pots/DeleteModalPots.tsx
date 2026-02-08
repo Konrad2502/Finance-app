@@ -12,10 +12,7 @@ export default function DeleteModalPots({
 }: DeleteModalProps) {
   return (
     <div className="delete-modal">
-      {/* BACKDROP */}
       <div className="delete-modal__overlay" />
-
-      {/* CONTENT */}
       <div className="delete-modal__content" role="dialog" aria-modal="true">
         <button
           className="delete-modal__close"

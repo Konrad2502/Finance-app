@@ -15,7 +15,6 @@ export default function PotsOverview() {
 
   return (
     <div className="pots">
-      {/* HEADER */}
       <div className="pots__heading">
         <h3 className="pots__heading-title">Pots</h3>
         <button
@@ -33,9 +32,7 @@ export default function PotsOverview() {
         </button>
       </div>
 
-      {/* CONTENT */}
       <div className="pots__content">
-        {/* LEFT TILE */}
         <div className="pots__total">
           <img
             className="pots__total-icon"
@@ -48,8 +45,6 @@ export default function PotsOverview() {
             <p className="pots__total-amount">${totalPots.toFixed(2)}</p>
           </div>
         </div>
-
-        {/* RIGHT LIST */}
         <ul className="pots__list">
           {pots.map((pot) => (
             <li key={pot.id} className={`pots__item pots__item--${pot.theme}`}>

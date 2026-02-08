@@ -5,3 +5,18 @@
     min-height: 100vh;
     background-color: $beige-100;
 }
+
+
+@media (max-width: 1024px) {
+  .home {
+    display: block;
+    min-height: 100vh;
+    padding-bottom: 72px; 
+  }
+}
+
+@media (max-width: 767px) {
+  .home {
+    padding-bottom: 64px;
+  }
+}

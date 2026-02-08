@@ -81,7 +81,6 @@ export default function Bills() {
   return (
     <main className="bills-page">
       <h1 className="bills-page__title">Recurring Bills</h1>
-
       <section className="bills-page__content">
         <aside className="bills-page__left">
           <BillsSummary
@@ -94,7 +93,6 @@ export default function Bills() {
             dueTotal={dueTotal}
           />
         </aside>
-
         <div className="bills-page__right">
           <BillsFilters
             sortValue={sortValue}
@@ -111,7 +109,6 @@ export default function Bills() {
             searchValue={searchValue}
             onSearchChange={setSearchValue}
           />
-
           <BillsList bills={sortedBills as Bill[]} />
         </div>
       </section>

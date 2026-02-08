@@ -2,7 +2,6 @@
 
 
 
-/* PAGE */
 .pots-page {
   flex: 1;
   padding: 40px 20px;
@@ -39,7 +38,6 @@
   line-height: 1;
 }
 
-/* CONTENT  */
 .pots-page__content {
   display: flex;
   flex-wrap: wrap;
@@ -48,7 +46,6 @@
   flex: 1;
 }
 
-/* CARD */
 .pot-card {
   background-color: $white;
   border-radius: 10px;
@@ -56,8 +53,6 @@
   display: flex;
   flex-direction: column;
   justify-content: space-between;
-
-  
   flex: 1 1 calc(50% - 10px);
   max-width: calc(50% - 10px);
 }
@@ -68,7 +63,6 @@
     gap: 20px;
 }
 
-/* header */
 .pot-card__header {
   display: flex;
   justify-content: space-between;
@@ -106,7 +100,6 @@
   align-items: center;
 }
 
-/* totals row */
 .pot-card__top {
   display: flex;
   justify-content: space-between;
@@ -122,7 +115,6 @@
   @include text-preset-1;
 }
 
-/* bar */
 .pot-card__bar {
   height: 8px;
   border-radius: 999px;
@@ -134,11 +126,11 @@
   height: 100%;
   border-radius: inherit;
 
-   &--green { background-color: $green; }
-  &--cyan { background-color: $cyan; }
-  &--yellow { background-color: $yellow; }
-  &--navy { background-color: $navy; }
-  &--red { background: $red; }
+&--green { background-color: $green; }
+&--cyan { background-color: $cyan; }
+&--yellow { background-color: $yellow; }
+&--navy { background-color: $navy; }
+&--red { background: $red; }
 &--purple { background: $purple; }
 &--turquoise { background: $turquoise; }
 &--brown { background: $brown; }
@@ -150,7 +142,6 @@
 &--orange { background: $orange; }
 }
 
-/* meta */
 
 .pot-card__meta {
   display: flex;
@@ -168,7 +159,6 @@
   color: $grey-600;
 }
 
-/* actions */
 .pot-card__actions {
   display: flex;
   gap: 16px;
@@ -184,8 +174,6 @@
   background-color: $beige-100;
   @include text-preset-4-bold;
 }
-
-/*Dropdown box(edit,delete)*/
 
 .pot-card__menu {
   position: relative; 
@@ -215,8 +203,6 @@
   overflow: hidden;
   z-index: 20;
 }
-
-/* ITEMS */
 
 .pot-card__menu-item {
   width: 100%;
@@ -248,14 +234,12 @@
  
 }
 
-/* BACKDROP */
 .delete-modal__overlay {
   position: absolute;
   inset: 0;
   background-color: rgba(0, 0, 0, 0.4);
 }
 
-/* CONTENT */
 .delete-modal__content {
   position: relative;
   background-color: $white;
@@ -272,7 +256,6 @@
   transform: translateY(-50%);
 }
 
-/* CLOSE */
 .delete-modal__close {
   position: absolute;
   top: 16px;
@@ -287,20 +270,17 @@
   }
 }
 
-/* TITLE */
 .delete-modal__title {
   @include text-preset-2;
   color: $grey-900;
 }
 
-/* TEXT */
 .delete-modal__text {
   @include text-preset-4;
   color: $grey-600;
   line-height: 1.5;
 }
 
-/* CONFIRM */
 .delete-modal__confirm {
   background-color: $red;
   color: $white;
@@ -316,16 +296,13 @@
   }
 }
 
-/* CANCEL */
 .delete-modal__cancel {
   background: none;
   border: none;
   cursor: pointer;
   text-align: center;
-
   @include text-preset-4;
   color: $grey-600;
-
   &:hover {
     color: $grey-900;
   }
@@ -333,7 +310,6 @@
 
 /* AddPotModal*/
 
-/* overlay */
 .pots-modal__overlay {
   position: fixed;
   inset: 0;
@@ -342,7 +318,6 @@
   
 }
 
-/* modal */
 .pots-modal {
   position: fixed;
   left: 50%;
@@ -398,7 +373,6 @@
   color: $grey-600;
 }
 
-/* inputs */
 .pots-modal__input {
   width: 100%;
   border: 1px solid $beige-500;
@@ -430,7 +404,6 @@ border: 1px solid $red;
   @include text-preset-5;
 }
 
-/* money input */
 .pots-modal__money-input {
   display: flex;
   align-items: center;
@@ -459,7 +432,6 @@ border: 1px solid $red;
   }
 }
 
-/* submit */
 .pots-modal__submit {
   width: 100%;
   margin-top: 0.4rem;
@@ -473,7 +445,6 @@ border: 1px solid $red;
   cursor: pointer;
 }
 
-/* dropdown */
 .pots-dropdown {
   position: relative;
   &-error {
@@ -551,9 +522,6 @@ color: $grey-600;
   align-items: center;
 }
 
-
-
-
 .color-dot {
   width: 14px;
   height: 14px;
@@ -582,8 +550,6 @@ color: $grey-600;
 /*Pot amounts modal*/
 
 
-
-/* overlay */
 .pot-amount-modal__overlay {
   position: fixed;
   inset: 0;
@@ -591,7 +557,6 @@ color: $grey-600;
   z-index: 1000;
 }
 
-/* modal */
 .pot-amount-modal {
   position: fixed;
   left: 50%;
@@ -606,7 +571,6 @@ color: $grey-600;
   z-index: 1001;
 }
 
-/* header */
 .pot-amount-modal__header {
   display: flex;
   justify-content: space-between;
@@ -624,14 +588,12 @@ color: $grey-600;
   cursor: pointer;
 }
 
-/* description */
 .pot-amount-modal__desc {
   margin: 1rem 0 2rem;
   @include text-preset-4;
   color: $grey-600;
 }
 
-/* top row */
 .pot-amount-modal__top {
   display: flex;
   justify-content: space-between;
@@ -649,7 +611,6 @@ color: $grey-600;
   color: $grey-900;
 }
 
-/* progress */
 .pot-amount-modal__bar {
   height: 10px;
   border-radius: 999px;
@@ -693,7 +654,6 @@ color: $grey-600;
   color: $grey-600;
 }
 
-/* input */
 .pot-amount-modal__field {
   margin-top: 24px;
 }
@@ -728,7 +688,6 @@ color: $grey-600;
   @include text-preset-4;
 }
 
-/* submit */
 .pot-amount-modal__submit {
   width: 100%;
   margin-top: 24px;
@@ -742,4 +701,74 @@ color: $grey-600;
 
   @include text-preset-4-bold;
   cursor: pointer;
+}
+
+/* 
+   POTS — RESPONSIVE
+   */
+
+
+@media (max-width: 1024px) {
+  .pots-page {
+    padding: 32px 16px;
+    gap: 20px;
+  }
+
+  .pots-page__content {
+    gap: 16px;
+  }
+
+  .pot-card {
+    flex: 1 1 100%;
+    max-width: 100%;
+    padding: 20px;
+  }
+
+  .pot-card__actions {
+    gap: 12px;
+  }
+
+  .pot-card__action {
+    padding: 12px 14px;
+  }
+}
+
+
+@media (max-width: 767px) {
+  .pots-page {
+    padding: 24px 12px;
+    gap: 16px;
+  }
+
+  .pots-page__btn {
+    padding: 10px 12px;
+  }
+
+  .pot-card {
+    padding: 16px;
+  }
+
+  .pot-card__actions {
+    gap: 10px;
+  }
+
+  .pot-card__action {
+    padding: 12px 12px;
+  }
+  .pots-modal {
+    transform: translate(-50%, -55%);
+  }
+  .delete-modal__content {
+    max-width: 350px;
+  }
+}
+
+@media (max-width: 359px) {
+  .pot-card__actions {
+    flex-direction: column;
+  }
+
+  .pot-card__action {
+    width: 100%;
+  }
 }

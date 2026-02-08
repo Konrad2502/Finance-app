@@ -1,6 +1,8 @@
 import Arrow from "../../assets/images/icon-caret-left.svg";
 import { CiSearch } from "react-icons/ci";
 import { type SortOption, type CategoryOption } from "../../utils/helpers";
+import { FaFilter } from "react-icons/fa";
+import { RiSortDesc } from "react-icons/ri";
 
 type Props = {
   searchValue: string;
@@ -34,7 +36,6 @@ export default function TransactionsFilters({
 }: Props) {
   return (
     <div className="transactions-page__inputs" ref={dropdownRef}>
-      {/* SEARCH */}
       <div className="transactions-page__search">
         <input
           type="text"
@@ -46,15 +47,15 @@ export default function TransactionsFilters({
         <CiSearch className="transactions-page__search-icon" />
       </div>
 
-      {/* FILTERS */}
       <div className="transactions-page__filters">
-        {/* SORT */}
         <div className="transactions-page__dropdown">
           <span className="transactions-page__dropdown-label">Sort by</span>
+
           <button
             type="button"
-            className="transactions-page__dropdown-btn"
+            className="transactions-page__dropdown-btn transactions-page__dropdown-btn--desktop"
             onClick={() => onToggleDropdown("sort")}
+            aria-expanded={openDropdown === "sort"}
           >
             <span>{sortValue}</span>
             <img
@@ -67,6 +68,15 @@ export default function TransactionsFilters({
                   : ""
               }`}
             />
+          </button>
+          <button
+            type="button"
+            className="transactions-page__dropdown-btn transactions-page__dropdown-btn--mobile"
+            onClick={() => onToggleDropdown("sort")}
+            aria-label="Open sort options"
+            aria-expanded={openDropdown === "sort"}
+          >
+            <RiSortDesc className="transactions-page__dropdown-icon" />
           </button>
 
           {openDropdown === "sort" && (
@@ -89,13 +99,15 @@ export default function TransactionsFilters({
           )}
         </div>
 
-        {/* CATEGORY */}
         <div className="transactions-page__dropdown">
           <span className="transactions-page__dropdown-label">Category</span>
+
+          {/* desktop/tablet button */}
           <button
             type="button"
-            className="transactions-page__dropdown-btn"
+            className="transactions-page__dropdown-btn transactions-page__dropdown-btn--desktop"
             onClick={() => onToggleDropdown("category")}
+            aria-expanded={openDropdown === "category"}
           >
             <span>{categoryValue}</span>
             <img
@@ -108,6 +120,17 @@ export default function TransactionsFilters({
                   : ""
               }`}
             />
+          </button>
+
+          {/* mobile icon-only button */}
+          <button
+            type="button"
+            className="transactions-page__dropdown-btn transactions-page__dropdown-btn--mobile"
+            onClick={() => onToggleDropdown("category")}
+            aria-label="Open category options"
+            aria-expanded={openDropdown === "category"}
+          >
+            <FaFilter className="transactions-page__dropdown-icon" />
           </button>
 
           {openDropdown === "category" && (

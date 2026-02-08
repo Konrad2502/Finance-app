@@ -48,7 +48,10 @@
 */
 
 .budgets-summary {
-  flex: 2;
+  flex: 0 1 auto;
+   min-width: 343px;   
+  max-width: 380px;  
+  width: 100%;
   background-color: $white;
   border-radius: 10px;
   padding: 24px;
@@ -231,8 +234,6 @@
   
 }
 
-
-
 .budget-card__stat {
   display: flex;
   flex-direction: column;
@@ -259,8 +260,6 @@
   @include text-preset-5;
   color: $grey-600;
 }
-
-
 
 /* 
    LATEST SPENDING
@@ -356,9 +355,9 @@
   color: $grey-600;
 }
 
-/* =========================
+/* 
    BUDGET CARD DROPDOWN
-========================= */
+*/
 
 .budget-card__menu {
   position: relative;
@@ -404,9 +403,9 @@
 .budget-card__menu-item--danger {
   color: $red;
 }
+
 /*Delete modal*/ 
 
-/* ROOT */
 .delete-modal {
   position: fixed;
   inset: 0;
@@ -414,14 +413,12 @@
  
 }
 
-/* BACKDROP */
 .delete-modal__overlay {
   position: absolute;
   inset: 0;
   background-color: rgba(0, 0, 0, 0.4);
 }
 
-/* CONTENT */
 .delete-modal__content {
   position: relative;
   background-color: $white;
@@ -438,7 +435,6 @@
   transform: translateY(-50%);
 }
 
-/* CLOSE */
 .delete-modal__close {
   position: absolute;
   top: 16px;
@@ -454,20 +450,17 @@
   }
 }
 
-/* TITLE */
 .delete-modal__title {
   @include text-preset-2;
   color: $grey-900;
 }
 
-/* TEXT */
 .delete-modal__text {
   @include text-preset-4;
   color: $grey-600;
   line-height: 1.5;
 }
 
-/* CONFIRM */
 .delete-modal__confirm {
   background-color: $red;
   color: $white;
@@ -483,7 +476,6 @@
   }
 }
 
-/* CANCEL */
 .delete-modal__cancel {
   background: none;
   border: none;
@@ -498,7 +490,7 @@
 
 /*Budgets Modal */
 
-/* overlay */
+
 .budget-modal__overlay {
   position: fixed;
   inset: 0;
@@ -508,7 +500,6 @@
 
 /* container */
 .budget-modal {
- 
   position: fixed;
   left: 50%;
   top: 50%;
@@ -521,7 +512,6 @@
   z-index: 1001;
 }
 
-/* header */
 .budget-modal__header {
   display: flex;
   align-items: center;
@@ -551,7 +541,6 @@
   color: $grey-600;
 }
 
-/* fields */
 .budget-modal__field {
   display: flex;
   flex-direction: column;
@@ -564,7 +553,6 @@
   color: $grey-600;
 }
 
-/* money input */
 .budget-modal__money-input {
   display: flex;
   align-items: center;
@@ -583,8 +571,6 @@
   color: $red;
 }
 
-
-
 .budget-modal__currency {
   color: #7a7a7a;
 }
@@ -597,7 +583,6 @@
   color: $grey-600;
 }
 
-/* submit */
 .budget-modal__submit {
   width: 100%;
   margin-top: 0.4rem;
@@ -611,11 +596,9 @@
   cursor: pointer;
 }
 
-/* dropdown */
 .dropdown {
   position: relative;
 }
-
 .dropdown__btn {
   width: 100%;
   border: 1px solid #cfcfcf;
@@ -641,7 +624,7 @@
   @include text-preset-4;
 }
 
-/* menu */
+
 .dropdown__menu {
   position: absolute;
   top: calc(100% + 0.55rem);
@@ -686,7 +669,7 @@ color: $grey-600;
   align-items: center;
 }
 
-/* dots */
+
 .color-dot {
   width: 14px;
   height: 14px;
@@ -711,3 +694,93 @@ color: $grey-600;
 .color-dot--army-green { background: $army-green; }
 .color-dot--gold { background: $gold; }
 .color-dot--orange { background: $orange; }
+
+
+
+
+@media (max-width: 1024px) {
+  .budgets-page {
+    padding: 32px 16px;
+    gap: 20px;
+  }
+
+  .budgets-page__content {
+    flex-direction: column;
+    gap: 16px;
+    min-width: 0;
+  }
+
+  .budgets-summary {
+    flex: 0 0 auto;
+    width: 100%;
+    max-width: none;
+    min-width: 0;
+    height: auto; /* zamiast 35% */
+    padding: 20px;
+    gap: 16px;
+  }
+
+  .budgets-list {
+    flex: 1 1 auto;
+    min-width: 0;
+    gap: 16px;
+  }
+
+  .budget-card {
+    padding: 20px;
+    gap: 14px;
+  }
+
+  
+  .budgets-summary__chart {
+    width: 200px;
+    height: 200px;
+  }
+}
+
+
+@media (max-width: 767px) {
+  .budgets-page {
+    padding: 24px 12px;
+    gap: 16px;
+  }
+
+  .budgets-page__heading {
+    gap: 12px;
+  }
+
+  .budgets-page__btn {
+    padding: 10px 12px;
+  }
+
+  .budgets-summary {
+    padding: 16px;
+  }
+
+  .budgets-summary__chart {
+    width: 180px;
+    height: 180px;
+  }
+
+  .budget-card {
+    padding: 16px;
+  }
+
+  .budget-card__stats {
+    gap: 12px;
+  }
+  .budget-modal {
+     transform: translate(-50%, -55%);
+  }
+  .budget-modal__title {
+    font-size: 26px;
+  }
+
+}
+
+@media (max-width: 359px) {
+  .budgets-summary__chart {
+    width: 160px;
+    height: 160px;
+  }
+}

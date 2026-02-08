@@ -9,8 +9,6 @@ import PotTargetInput from "./PotTargetInput";
 import PotThemeSelect from "./PotThemeSelect";
 import { colorOptions, type ColorOption } from "../../utils/helpers";
 
-/* ===== OPTIONS ===== */
-
 type OpenColor = "active" | null;
 
 type AddPotModalProps = {

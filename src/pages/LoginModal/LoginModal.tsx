@@ -1,6 +1,5 @@
 import "./LoginModal.scss";
 import logo from "../../assets/images/logo-large.svg";
-// import logoSmall from "../../assets/images/logo-small.svg";
 import Avatar from "../../assets/images/illustration-authentication.svg";
 import logoPasswordHide from "../../assets/images/icon-hide-password.svg";
 import logoPassword from "../../assets/images/icon-show-password.svg";

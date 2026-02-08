@@ -56,9 +56,7 @@ export default function BudgetsSummary({
           </p>
         </div>
       </div>
-
       <h3 className="budgets-summary__title">Spending Summary</h3>
-
       <ul className="budgets-summary__list">
         {items.map(({ budget, spent }) => (
           <li

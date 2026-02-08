@@ -30,7 +30,6 @@ export default function BudgetCard({
 }: BudgetCardProps) {
   return (
     <article className="budget-card">
-      {/* HEADER */}
       <header className="budget-card__header">
         <div className="budget-card__title">
           <span
@@ -51,16 +50,12 @@ export default function BudgetCard({
       <p className="budget-card__limit">
         Maximum of ${budget.maximum.toFixed(2)}
       </p>
-
-      {/* BAR */}
       <div className="budget-card__bar">
         <div
           className={`budget-card__bar-fill budget-card__bar-fill--${budget.theme}`}
           style={{ width: `${progress}%` }}
         />
       </div>
-
-      {/* STATS */}
       <div className="budget-card__stats">
         <div className={`budget-card__stat budget-card__stat--${budget.theme}`}>
           <span className="budget-card__stat-label">Spent</span>
@@ -72,8 +67,6 @@ export default function BudgetCard({
           <strong>${remaining.toFixed(2)}</strong>
         </div>
       </div>
-
-      {/* LATEST */}
       <BudgetCardRecentTransactions
         transactions={recentTransactions}
         onNavigateTransactions={onNavigateTransactions}

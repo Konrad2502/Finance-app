@@ -74,8 +74,6 @@ export default function EditModal({
 
   const isThemeUsed = (color: ColorOption) => usedThemes.includes(color);
 
-  /* ===== SUBMIT ===== */
-
   const handleSubmit = () => {
     if (isCategoryUsed(categoryValue)) {
       setCategoryError("Category already selected");
@@ -147,18 +145,12 @@ export default function EditModal({
     return () => document.removeEventListener("mousedown", handleClickOutside);
   }, [openDropdown]);
 
-  /* ===== RENDER ===== */
-
   return (
     <>
-      {/* OVERLAY */}
       <div className="budget-modal__overlay" />
-
-      {/* MODAL */}
       <div className="budget-modal" role="dialog" aria-modal="true">
         <header className="budget-modal__header">
           <h2 className="budget-modal__title">{title}</h2>
-
           <button
             onClick={closeModal}
             type="button"
@@ -167,10 +159,7 @@ export default function EditModal({
             <img src={CloseBtn} alt="Close modal" />
           </button>
         </header>
-
         <p className="budget-modal__desc">{text}</p>
-
-        {/* CATEGORY */}
         <BudgetCategorySelect
           value={categoryValue}
           error={categoryError}
@@ -187,8 +176,6 @@ export default function EditModal({
           }}
           dropdownRef={categoryRef}
         />
-
-        {/* AMOUNT */}
         <BudgetAmountInput
           value={maximum}
           error={maxError}
@@ -198,10 +185,7 @@ export default function EditModal({
             if (maxError) setMaxError(null);
           }}
         />
-
-        {/* THEME */}
         <BudgetThemeSelect
-          // value={colorValue}
           selected={selectedColor}
           options={colorOptions}
           error={colorError}

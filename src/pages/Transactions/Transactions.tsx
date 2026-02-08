@@ -1,6 +1,5 @@
 import "./Transactions.scss";
 import { useState, useEffect, useRef, useMemo } from "react";
-
 import { useAppSelector } from "../../store/hooks";
 import { selectAllTransaction } from "../../features/appData/appDataSelectors";
 
@@ -86,7 +85,6 @@ export default function Transactions() {
       <h1 className="transactions-page__title">Transactions</h1>
 
       <section className="transactions-page__card">
-        {/* FILTERS */}
         <TransactionsFilters
           searchValue={searchValue}
           onSearchChange={setSearchValue}
@@ -109,7 +107,6 @@ export default function Transactions() {
           dropdownRef={dropdownRef}
         />
 
-        {/* HEADER */}
         <div className="transactions-page__header">
           <span className="transactions-page__header-user">
             Recipient / Sender
@@ -120,11 +117,7 @@ export default function Transactions() {
           </span>
           <span className="transactions-page__header-amount">Amount</span>
         </div>
-
-        {/* LIST */}
         <TransactionsList items={currentItems} />
-
-        {/* PAGINATION */}
         <TransactionsPagination
           currentPage={currentPage}
           totalPages={totalPages}

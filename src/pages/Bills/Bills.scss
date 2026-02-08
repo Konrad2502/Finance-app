@@ -1,6 +1,5 @@
 @import "../../styles/settings";
 
-
 .bills-page {
   flex: 1;
   padding: 40px 20px;
@@ -14,15 +13,12 @@
   @include text-preset-1;
 }
 
-/* LAYOUT */
 .bills-page__content {
   display: flex;
   gap: 24px;
- 
   height: 100%;
 }
 
-/* LEFT */
 .bills-page__left {
   flex: 2;
   display: flex;
@@ -30,7 +26,6 @@
   gap: 20px;
 }
 
-/* total card (dark) */
 .bills-summary {
   background-color: $grey-900;
   color: $white;
@@ -59,7 +54,6 @@
   }
 }
 
-/* summary card  */
 .bills-summary-card {
   background-color: $white;
   border-radius: 12px;
@@ -100,7 +94,6 @@
   }
 }
 
-/* RIGHT */
 .bills-page__right {
   flex: 5;
   background-color: $white;
@@ -113,14 +106,12 @@
   min-height: 0;
 }
 
-/* INPUTS ROW */
 .bills-page__inputs {
   display: flex;
   justify-content: space-between;
   align-items: center;
   gap: 20px;
 }
-
 
 .bills-page__search {
   position: relative;
@@ -142,17 +133,16 @@
   color: $grey-600;
 }
 
-/* SORT */
 .bills-page__sort {
   display: flex;
   align-items: center;
   gap: 12px;
   position: relative;
+}
 
-  span {
-    @include text-preset-5;
-    color: $grey-600;
-  }
+.bills-page__sort-label {
+  @include text-preset-5;
+  color: $grey-600;
 }
 
 .bills-page__sort-btn {
@@ -165,12 +155,11 @@
   display: flex;
   align-items: center;
   gap: 12px;
-  span {
- @include text-preset-4;
- color: #000000;
-  }
 
- 
+  span {
+    @include text-preset-4;
+    color: #000000;
+  }
 
   img {
     width: 14px;
@@ -180,10 +169,23 @@
 }
 
 .bills-page__rotate {
-transform: rotate(180deg);
+  transform: rotate(180deg);
 }
 
-/* DROPDOWN */
+.bills-page__sort-btn--mobile {
+  display: none;
+  width: 44px;
+  height: 44px;
+  padding: 0;
+  justify-content: center;
+  align-items: center;
+  gap: 0;
+}
+
+.bills-page__sort-icon {
+  font-size: 18px;
+}
+
 .bills-page__dropdown {
   position: absolute;
   top: calc(100% + 10px);
@@ -218,7 +220,6 @@ transform: rotate(180deg);
   @include text-preset-4-bold;
 }
 
-/* LIST */
 .bills-page__list {
   list-style: none;
   padding: 0;
@@ -237,7 +238,6 @@ transform: rotate(180deg);
   border-top: 1px solid $beige-100;
 }
 
-/* left part: avatar + name */
 .bills-page__bill {
   display: flex;
   align-items: center;
@@ -257,7 +257,6 @@ transform: rotate(180deg);
   }
 }
 
-/* middle: due date + status icon */
 .bills-page__due {
   display: flex;
   align-items: center;
@@ -276,7 +275,6 @@ transform: rotate(180deg);
   }
 }
 
-
 .bills-page__amount {
   flex: 1;
   text-align: right;
@@ -288,3 +286,146 @@ transform: rotate(180deg);
   color: $red;
 }
 
+/* =========================
+   BILLS — RESPONSIVE
+   ========================= */
+
+
+@media (max-width: 1024px) {
+  .bills-page {
+    padding: 32px 16px;
+    gap: 20px;
+  }
+
+  .bills-page__content {
+    flex-direction: column;
+    gap: 16px;
+    height: auto;
+    min-width: 0;
+  }
+
+  .bills-page__left,
+  .bills-page__right {
+    flex: 0 0 auto;
+    min-width: 0;
+  }
+
+  .bills-page__right {
+    padding: 20px;
+    gap: 16px;
+  }
+
+  .bills-page__search {
+    flex: 1 1 auto;
+    min-width: 0;
+  }
+
+  .bills-page__search-input {
+    width: 100%;
+    max-width: 520px;
+  }
+
+  .bills-page__list {
+    gap: 0;
+  }
+
+  .bills-page__row {
+    padding: 16px 0;
+  }
+}
+
+@media (max-width: 767px) {
+  .bills-page {
+    padding: 24px 12px;
+  }
+
+  .bills-page__right {
+    padding: 16px;
+  }
+
+  .bills-page__inputs {
+    justify-content: space-between;
+    align-items: center;
+    gap: 12px;
+  }
+
+  .bills-page__search-input {
+    width: 100%;
+    max-width: none;
+  }
+
+  .bills-page__sort-label {
+    display: none;
+  }
+
+  .bills-page__sort-btn--desktop {
+    display: none;
+  }
+
+  .bills-page__sort-btn--mobile {
+    display: inline-flex;
+  }
+
+  .bills-page__row {
+    display: grid;
+    grid-template-columns: 1fr auto;
+    grid-template-areas:
+      "bill amount"
+      "due  amount";
+    column-gap: 12px;
+    row-gap: 6px;
+    padding: 14px 0;
+  }
+
+  .bills-page__bill {
+    grid-area: bill;
+    min-width: 0;
+    flex: unset;
+
+    span {
+      min-width: 0;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+    }
+  }
+
+  .bills-page__due {
+    grid-area: due;
+    display: flex;
+    justify-content: flex-start;
+    flex: unset;
+    gap: 8px;
+  }
+
+  .bills-page__amount {
+    grid-area: amount;
+    flex: unset;
+    align-self: center;
+  }
+
+  .bills-page__dropdown {
+    right: 0;
+  }
+}
+
+@media (max-width: 359px) {
+  .bills-summary,
+  .bills-summary-card,
+  .bills-page__right {
+    padding: 14px;
+  }
+
+  .bills-page__row {
+    grid-template-columns: 1fr;
+    grid-template-areas:
+      "bill"
+      "due"
+      "amount";
+    row-gap: 8px;
+  }
+
+  .bills-page__amount {
+    text-align: left;
+  }
+}

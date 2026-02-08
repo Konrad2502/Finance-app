@@ -33,7 +33,6 @@ export default function PotCard({
 
   return (
     <article className="pot-card">
-      {/* HEADER */}
       <header className="pot-card__header">
         <div className="pot-card__title">
           <span className={`pot-card__dot pot-card__dot--${pot.theme}`} />
@@ -47,23 +46,18 @@ export default function PotCard({
           onDelete={onDelete}
         />
       </header>
-
-      {/* CONTENT */}
       <div className="pots-card__wrapper">
         <div className="pot-card__top">
           <span className="pot-card__label">Total Saved</span>
           <span className="pot-card__amount">${formatMoney(pot.total)}</span>
         </div>
 
-        {/* BAR */}
         <div className="pot-card__bar">
           <div
             className={`pot-card__bar-fill pot-card__bar-fill--${pot.theme}`}
             style={{ width: `${safePercent}%` }}
           />
         </div>
-
-        {/* META */}
         <div className="pot-card__meta">
           <span className="pot-card__percent">{safePercent.toFixed(1)}%</span>
           <span className="pot-card__target">
@@ -72,7 +66,6 @@ export default function PotCard({
         </div>
       </div>
 
-      {/* ACTIONS */}
       <div className="pot-card__actions">
         <button type="button" className="pot-card__action" onClick={onAddMoney}>
           + Add Money

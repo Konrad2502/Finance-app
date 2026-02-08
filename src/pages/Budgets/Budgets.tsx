@@ -52,7 +52,6 @@ export default function Budgets() {
       {/* HEADER */}
       <div className="budgets-page__heading">
         <h1 className="budgets-page__title">Budgets</h1>
-
         <button
           onClick={() => setOpenModal("add")}
           className="budgets-page__btn"
@@ -62,17 +61,12 @@ export default function Budgets() {
           <span className="budgets-page__btnText">Add New Budget</span>
         </button>
       </div>
-
-      {/* CONTENT */}
       <section className="budgets-page__content">
-        {/* LEFT – SUMMARY */}
         <BudgetsSummary
           items={items}
           totalSpent={totalSpent}
           totalLimit={totalLimit}
         />
-
-        {/* RIGHT – BUDGET CARDS */}
         <div className="budgets-list">
           {items.map(
             ({ budget, spent, remaining, progress, recentTransactions }) => (
@@ -98,7 +92,6 @@ export default function Budgets() {
           )}
         </div>
       </section>
-
       {openModal === "delete" && (
         <DeleteModal closeModal={closeModal} confirmDelete={confirmDelete} />
       )}

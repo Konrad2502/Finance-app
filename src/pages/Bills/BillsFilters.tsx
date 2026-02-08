@@ -1,6 +1,7 @@
 import { CiSearch } from "react-icons/ci";
 import Arrow from "../../assets/images/icon-caret-down.svg";
 import { type SortOption } from "../../utils/helpers";
+import { RiSortDesc } from "react-icons/ri";
 
 type Props = {
   sortValue: SortOption;
@@ -36,13 +37,15 @@ export default function BillsFilters({
         />
         <CiSearch className="bills-page__search-icon" />
       </div>
-
       <div className="bills-page__sort">
-        <span>Sort by</span>
+        <span className="bills-page__sort-label">Sort by</span>
+
+        {/* desktop/tablet */}
         <button
           type="button"
-          className="bills-page__sort-btn"
+          className="bills-page__sort-btn bills-page__sort-btn--desktop"
           onClick={() => onToggleDropdown("active")}
+          aria-expanded={openDropdown === "active"}
         >
           <span>{sortValue}</span>
           <img
@@ -51,6 +54,17 @@ export default function BillsFilters({
             aria-hidden="true"
             className={openDropdown === "active" ? "bills-page__rotate" : ""}
           />
+        </button>
+
+        {/* mobile icon-only */}
+        <button
+          type="button"
+          className="bills-page__sort-btn bills-page__sort-btn--mobile"
+          onClick={() => onToggleDropdown("active")}
+          aria-label="Open sort options"
+          aria-expanded={openDropdown === "active"}
+        >
+          <RiSortDesc className="bills-page__sort-icon" />
         </button>
 
         {openDropdown === "active" && (

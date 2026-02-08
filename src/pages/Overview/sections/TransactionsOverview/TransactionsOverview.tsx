@@ -9,7 +9,6 @@ export default function TransactionsOverview() {
 
   return (
     <div className="transactions">
-      {/* HEADER */}
       <div className="transactions__heading">
         <h3 className="transactions__heading-title">Transactions</h3>
         <button
@@ -26,8 +25,6 @@ export default function TransactionsOverview() {
           />
         </button>
       </div>
-
-      {/* CONTENT */}
       <div className="transactions__content">
         <ul className="transactions__list">
           {recentTransactions.map((item) => {
@@ -44,7 +41,6 @@ export default function TransactionsOverview() {
 
             return (
               <li key={item.id} className="transactions__item">
-                {/* LEFT */}
                 <div className="transactions__item-left">
                   <img
                     className="transactions__avatar"

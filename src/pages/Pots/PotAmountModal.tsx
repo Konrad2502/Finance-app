@@ -66,10 +66,7 @@ export default function PotAmountModal({
 
   return (
     <>
-      {/* overlay */}
       <div className="pot-amount-modal__overlay" />
-
-      {/* modal */}
       <div className="pot-amount-modal" role="dialog" aria-modal="true">
         <header className="pot-amount-modal__header">
           <h2 className="pot-amount-modal__title">{title}</h2>
@@ -84,16 +81,12 @@ export default function PotAmountModal({
         </header>
 
         <p className="pot-amount-modal__desc">{description}</p>
-
-        {/* AMOUNT INFO */}
         <div className="pot-amount-modal__top">
           <span className="pot-amount-modal__label">New Amount</span>
           <span className="pot-amount-modal__value">
             ${currentAmount.toFixed(2)}
           </span>
         </div>
-
-        {/* PROGRESS */}
         <div className="pot-amount-modal__progress">
           <div className="pot-amount-modal__bar">
             <div
@@ -114,7 +107,6 @@ export default function PotAmountModal({
           </div>
         </div>
 
-        {/* INPUT */}
         <div className="pot-amount-modal__field">
           <label className="pot-amount-modal__field-label">{amountLabel}</label>
 
@@ -137,8 +129,6 @@ export default function PotAmountModal({
             <span className="pots-modal__error">{amountError}</span>
           )}
         </div>
-
-        {/* SUBMIT */}
         <button
           type="button"
           className="pot-amount-modal__submit"
