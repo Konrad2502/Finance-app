@@ -269,21 +269,20 @@
   .sidebar.sidebar--collapse .sidebar__item-text {
     display: none;
   }
-
-    .sidebar__item:hover {
-    background-color: transparent;
-    color: inherit;
-    border-bottom-color: transparent; 
-    border-left: none;
+  .sidebar__item.sidebar__item--active {
+    background-color: $white;
+    color: $grey-900;
+    border-bottom-color: $green;
   }
 
- 
-  .sidebar__item:hover .sidebar__item-img--default {
-    opacity: 1;
-  }
-  .sidebar__item:hover .sidebar__item-img--active {
+  .sidebar__item.sidebar__item--active .sidebar__item-img--default {
     opacity: 0;
   }
+
+  .sidebar__item.sidebar__item--active .sidebar__item-img--active {
+    opacity: 1;
+  }
+   
 }
 
 
