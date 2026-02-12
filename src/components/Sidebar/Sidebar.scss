@@ -269,6 +269,21 @@
   .sidebar.sidebar--collapse .sidebar__item-text {
     display: none;
   }
+
+    .sidebar__item:hover {
+    background-color: transparent;
+    color: inherit;
+    border-bottom-color: transparent; /* bo na mobile masz border-bottom */
+    border-left: none;
+  }
+
+  /* WYŁĄCZ hover przełączanie ikonek */
+  .sidebar__item:hover .sidebar__item-img--default {
+    opacity: 1;
+  }
+  .sidebar__item:hover .sidebar__item-img--active {
+    opacity: 0;
+  }
 }
 
 
