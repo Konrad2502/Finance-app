@@ -1,75 +1,76 @@
-# React + TypeScript + Vite
+💰 Personal Finance App
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+This is a multi-page personal finance web application built with React, TypeScript, and SCSS. The app lets you manage budgets and saving pots, browse transactions with pagination, and track recurring bills for the current month. It includes search/sort/filter, full CRUD flows, form validation, keyboard accessibility, and a fully responsive UI.
 
-Currently, two official plugins are available:
+🌍 Live Demo
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Babel](https://babeljs.io/) (or [oxc](https://oxc.rs) when used in [rolldown-vite](https://vite.dev/guide/rolldown)) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+You can view the deployed project here: https://kl-finance-app.netlify.app/
 
-## React Compiler
+📸 Preview
 
-The React Compiler is enabled on this template. See [this documentation](https://react.dev/learn/react-compiler) for more information.
 
-Note: This will impact Vite dev & build performances.
 
-## Expanding the ESLint configuration
+📌 Features
 
-If you are developing a production application, we recommend updating the configuration to enable type-aware lint rules:
+✅ Overview page with all personal finance data at-a-glance  
+✅ Transactions page with pagination (10 transactions per page)  
+✅ Search, sort, and filter transactions  
+✅ Budgets: full CRUD (create, read, update, delete)  
+✅ Saving pots: full CRUD + progress tracking  
+✅ Add money to / withdraw money from pots  
+✅ Latest 3 transactions displayed per budget category  
+✅ Recurring bills page with current-month status  
+✅ Search and sort recurring bills  
+✅ Form validation with clear error messages  
+✅ Full keyboard accessibility (navigate + perform actions)  
+✅ Fully responsive design (mobile/tablet/desktop)  
+✅ Hover and focus states for all interactive elements  
+✅ Bonus: authentication flow (sign up / login)
 
-```js
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
+🛠️ Tech Stack
 
-      // Remove tseslint.configs.recommended and replace with this
-      tseslint.configs.recommendedTypeChecked,
-      // Alternatively, use this for stricter rules
-      tseslint.configs.strictTypeChecked,
-      // Optionally, add this for stylistic rules
-      tseslint.configs.stylisticTypeChecked,
+React – For building UI components  
+TypeScript – For type-safe development  
+React Router – For multi-page navigation  
+SCSS – For styling and responsive layout  
+React Hooks – For managing component logic and state  
 
-      // Other configs...
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
-```
+🚀 Installation & Setup
 
-You can also install [eslint-plugin-react-x](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-x) and [eslint-plugin-react-dom](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-dom) for React-specific lint rules:
+Clone the repository:
 
-```js
-// eslint.config.js
-import reactX from 'eslint-plugin-react-x'
-import reactDom from 'eslint-plugin-react-dom'
+git clone https://github.com/Konrad2502/Finance-app.git
 
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
-      // Enable lint rules for React
-      reactX.configs['recommended-typescript'],
-      // Enable lint rules for React DOM
-      reactDom.configs.recommended,
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
-```
+Install dependencies:
+npm install
+
+Start the development server:
+npm run dev
+
+📜 Available Scripts
+
+npm run dev – Runs the app in development mode
+
+npm run build – Builds the app for production
+
+npm run preview – Previews the production build locally
+
+npm run lint – Runs the linter (if configured)
+
+📚 What I Learned
+
+This project helped me deepen my knowledge of:
+
+🎯 TypeScript in React – Strong typing for props, state, and reusable components
+🎯 Data UX – Pagination, filtering, sorting, and search for large lists
+🎯 CRUD Workflows – Designing complete create/edit/delete flows with good UX
+🎯 Accessibility – Keyboard navigation, focus management, and UI states
+🎯 Responsive UI – Building layouts that adapt cleanly to different screens
+🎯 Form Validation – User-friendly validation messages and edge-case handling
+
+📬 Contact
+
+If you have any questions, feel free to reach out:
+
+🔗 GitHub: Konrad2502
+✉️ Email: konrad.litak@gmail.com
