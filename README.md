@@ -8,7 +8,7 @@ You can view the deployed project here: https://kl-finance-app.netlify.app/
 
 📸 Preview
 
-
+![Preview](./src/screenshot/finance-app.png)
 
 📌 Features
 
