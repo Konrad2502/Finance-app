@@ -4,19 +4,17 @@ import type { AppData} from "./appDataTypes";
 import { selectPotsTotal } from '../potSlice/potSelectors';
 
 
-/* ===== ROOT ===== */
+/* ROOT  */
 export const selectAppData = (state: RootState): AppData | null =>
   state.appData.data;
 
-/* ===== STATUS / ERROR ===== */
+/* STATUS / ERROR  */
 export const selectAppDataStatus = (state: RootState) =>
   state.appData.status;
 
 export const selectAppDataError = (state: RootState) =>
   state.appData.error;
 
-// export const selectBalance = (state: RootState) : Balance | undefined => 
-//     state.appData.data?.balance
 
 export const selectAllTransaction = (state: RootState) => 
     state.appData.data?.transactions ?? [];
