@@ -627,7 +627,7 @@
 
 .dropdown__menu {
   position: absolute;
-  bottom: calc(100% + 0.55rem);
+  top: calc(100% + 0.55rem);
   left: 0;
   width: 100%;
   background: #fff;
@@ -638,6 +638,20 @@
   max-height: 240px;
   overflow-y: auto;
 }
+
+ .dropdown__menu-theme {
+  position: absolute;
+  bottom: calc(100% + 0.55rem);
+  left: 0;
+  width: 100%;
+  background: #fff;
+  border-radius: 14px;
+  padding: 0.5rem;
+  box-shadow: 0 20px 50px rgba(0, 0, 0, 0.18);
+  z-index: 10;
+  max-height: 240px;
+  overflow-y: auto;
+ }
 
 .dropdown__item {
   width: 100%;
@@ -655,6 +669,7 @@
     background: #f3f3f3;
   }
 }
+
 .dropdown__item--disabled {
 color: $grey-600;
 }

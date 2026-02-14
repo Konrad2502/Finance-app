@@ -51,7 +51,7 @@ export default function BudgetThemeSelect<T extends string>({
         {error && <span className="budget-modal__error">{error}</span>}
 
         {isOpen && (
-          <div className="dropdown__menu">
+          <div className="dropdown__menu-theme">
             {options.map((opt) => {
               const disable = isUsed(opt.value);
               return (
